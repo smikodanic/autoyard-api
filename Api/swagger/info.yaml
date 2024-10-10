@@ -1,0 +1,9 @@
+paths:
+  /info:
+    get:
+      tags:
+        - General
+      summary: Retrieve an API info.
+      responses:
+        200:
+          description: Get the API info.

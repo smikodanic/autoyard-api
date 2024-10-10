@@ -3,10 +3,13 @@ const passport = require('passport');
 const express = require('express');
 const app = express();
 
-const cors = require('./middlewares/cors');
-const mongooseDriver = require('./middlewares/mongodb/mongooseDriver');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocs = require('./middlewares/swaggerDocs.js');
+
+const cors = require('./middlewares/cors.js');
+const mongooseDriver = require('./middlewares/mongodb/mongooseDriver.js');
 const { defineStrategy4api } = require('./middlewares/auth/passportstrategy_bearer.js');
-const logErrorApi = require('./middlewares/logErrorApi');
+const logErrorApi = require('./middlewares/logErrorApi.js');
 
 
 
@@ -32,6 +35,7 @@ app.use((req, res, next) => { global.ms_api.req = req; global.ms_api.res = res; 
 
 /***** API ROUTES *****/
 app.use('/info', require('./routes/info.js'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/theparking-eu', require('./routes/theparking-eu/index.js'));
 
 

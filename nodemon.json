@@ -12,10 +12,10 @@
   "watch": [
     "Api",
     "starter.js",
-    "tmp/envs"
+    ".env"
   ],
   "env": {
     "NODE_ENV": "lokal"
   },
-  "ext": "js json"
+  "ext": "js json yaml"
 }

@@ -10,4 +10,4 @@ global.ms_api = {
 /*** start HTTP Server i.e. API ***/
 const Api = require('./Api');
 const api = new Api();
-api.start(process.env.PORT);
+api.start(process.env.API_PORT);

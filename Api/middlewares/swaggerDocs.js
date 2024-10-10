@@ -1,0 +1,39 @@
+const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const path = require('path');
+const fs = require('fs');
+
+const app = express();
+
+// Function to merge all YAML files into a single Swagger document
+const loadSwaggerDocs = (directory) => {
+  const swaggerDocs = {
+    openapi: '3.0.0',
+    info: {
+      title: 'AutoYard API',
+      version: '1.0.0',
+      description: 'Car search engine.',
+    },
+    paths: {},
+    servers: [
+      { url: process.env.API_ENV === 'development' ? 'http://localhost:3138' : 'http://95.111.249.142:3138' }
+    ]
+  };
+
+  const files = fs.readdirSync(directory);
+
+  files.forEach((file) => {
+    const filePath = path.join(directory, file);
+    const swaggerFile = YAML.load(filePath);
+    Object.assign(swaggerDocs.paths, swaggerFile.paths);
+  });
+
+  return swaggerDocs;
+};
+
+// Load Swagger docs from the "swagger" directory
+const swaggerDocs = loadSwaggerDocs(path.join(__dirname, '../swagger'));
+
+
+module.exports = swaggerDocs;
