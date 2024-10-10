@@ -1,0 +1,26 @@
+{
+  "name": "autoyard-api",
+  "version": "1.0.0",
+  "title": "AutoYard API",
+  "description": "The API endpoints for autoyard project",
+  "private": true,
+  "main": "starter.js",
+  "keywords": [
+    "autoyard",
+    "API"
+  ],
+  "scripts": {
+    "inst": "rm -rf node_modules && rm package-lock.json && npm install",
+    "dev": "export NODE_ENV=lokal && nodemon starter.js",
+    "development": "export PORT=3138 && export NODE_ENV=development && pm2 start starter.js --name autoyard-api",
+    "deploy": "export PORT=3138 && export NODE_ENV=production && pm2 start starter.js --name autoyard-api"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "moment": "^2.29.4",
+    "mongoose": "^6.5.2",
+    "morgan": "^1.10.0",
+    "passport": "^0.6.0",
+    "passport-http-bearer": "^1.0.1"
+  }
+}
