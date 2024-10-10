@@ -47,7 +47,7 @@ module.exports = async (req, res, next) => {
     const date_published_to = req.body.date_published_to ?? timeLib.getCurrentYYYYMMDD();
     moQuery.date_published = { $gte: date_published_from, $lte: date_published_to };
 
-    console.log(moQuery);
+    // console.log(moQuery);
 
     const results = await theparking_eu_model.list(moQuery, limit, skip, sort);
 
