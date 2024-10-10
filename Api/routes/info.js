@@ -9,7 +9,7 @@ module.exports = (req, res) => {
 
   const jdata = {
     api: {
-      name: global.ms_api.env.api_name,
+      name: 'AutoYard API',
       version: pkg.version,
     },
     nodejs: {

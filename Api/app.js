@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors);
 
 // mongoose
-mongooseDriver.connectDefault(global.ms_api.env.mongodb);
+mongooseDriver.connectDefault(process.env.MONGODB_URI);
 
 // auth middlewares
 app.use(passport.initialize()); // initialize passport module
