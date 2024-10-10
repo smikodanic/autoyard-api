@@ -97,7 +97,7 @@ paths:
                 items:
                   type: object
                   properties:
-                    id:
+                    _id:
                       type: string
                       description: Unique identifier for the car
                     make:
