@@ -112,8 +112,8 @@ class ErrorApi {
     process.on('uncaughtException', (err) => {
       err.message = 'UNCAUGHT error:: ' + err.message || '';
       err.level = 'uncaught';
-      const req = !!global.ms_api ? global.ms_api.req : null;
-      const res = !!global.ms_api ? global.ms_api.res : null;
+      const req = !!global.api ? global.api.req : null;
+      const res = !!global.api ? global.api.res : null;
       this.create_errorDoc(err, req);
       this.send2mongo();
       this.send2console(err);
@@ -129,8 +129,8 @@ class ErrorApi {
     process.on('unhandledRejection', (err, promise) => {
       err.message = 'UNHANDLED error:: ' + err.message || '';
       err.level = 'unhandled';
-      const req = !!global.ms_api ? global.ms_api.req : null;
-      const res = !!global.ms_api ? global.ms_api.res : null;
+      const req = !!global.api ? global.api.req : null;
+      const res = !!global.api ? global.api.res : null;
       this.create_errorDoc(err, req);
       this.send2mongo();
       this.send2console(err);

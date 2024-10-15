@@ -1,5 +1,5 @@
 const postmark = require('postmark');
-const env = global.ms_api.env;
+const env = global.api.env;
 
 
 /**

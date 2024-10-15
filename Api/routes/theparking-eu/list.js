@@ -1,4 +1,4 @@
-const theparking_eu_model = require('../../models/theparking_eu.model.js');
+const { Op } = require('sequelize');
 const timeLib = require('../../lib/timeLib.js');
 
 
@@ -23,37 +23,58 @@ const timeLib = require('../../lib/timeLib.js');
 module.exports = async (req, res, next) => {
 
   try {
-    const limit = req.query.limit ?? 25;
-    const skip = req.query.skip ?? 0;
-    const sort = req.query.sort ?? 'updated_at';
+    const limit = req.query.limit > 50 ? 50 : +req.query.limit;
+    const offset = +req.query.offset || 0;
+    const order1 = req.query.order || ['crawled_at', 'ASC'];
+    console.log(req.query);
 
-    const moQuery = {};
-    if (!!req.body.make) { moQuery.make = { $regex: req.body.make, $options: 'i' }; }
-    if (!!req.body.model) { moQuery.model = { $regex: req.body.model, $options: 'i' }; }
-    if (!!req.body.version) { moQuery.version = { $regex: req.body.version, $options: 'i' }; }
-    if (!!req.body.location) { moQuery.location = { $regex: req.body.location, $options: 'i' }; }
-    if (!!req.body.fuel) { moQuery.fuel = { $regex: req.body.fuel, $options: 'i' }; }
-    if (!!req.body.transmission) { moQuery.transmission = { $regex: req.body.transmission, $options: 'i' }; }
-    if (!!req.body.color) { moQuery.color = { $regex: req.body.color, $options: 'i' }; }
-    if (!!req.body.doors) { moQuery.doors = req.body.doors; }
+    const where = {};
+    if (!!req.body.make) { where.make = { [Op.iLike]: `%${req.body.make}%` }; }
+    if (!!req.body.model) { where.model = { [Op.iLike]: `%${req.body.model}%` }; }
+    if (!!req.body.version) { where.version = { [Op.iLike]: `%${req.body.version}%` }; }
+    if (!!req.body.location) { where.location = { [Op.iLike]: `%${req.body.location}%` }; }
+    if (!!req.body.fuel) { where.fuel = { [Op.iLike]: `%${req.body.fuel}%` }; }
+    if (!!req.body.transmission) { where.transmission = { [Op.iLike]: `%${req.body.transmission}%` }; }
+    if (!!req.body.color) { where.color = { [Op.iLike]: `%${req.body.color}%` }; }
+    if (!!req.body.doors) { where.doors = { [Op.iLike]: `%${req.body.doors}%` }; }
 
     const year_from = req.body.year_from ?? 1900;
     const year_to = req.body.year_to ?? new Date().getFullYear();
-    moQuery.year = { $gte: year_from, $lte: year_to };
+    where.year = {
+      [Op.gte]: year_from,
+      [Op.lte]: year_to
+    };
 
-    if (!!req.body.ad_title) { moQuery.ad_title = { $regex: req.body.ad_title, $options: 'i' }; }
+    if (!!req.body.ad_title) { where.ad_title = { [Op.iLike]: `%${req.body.ad_title}%` }; }
 
-    const date_published_from = req.body.date_published_from ?? '2000-01-01';
-    const date_published_to = req.body.date_published_to ?? timeLib.getCurrentYYYYMMDD();
-    moQuery.date_published = { $gte: date_published_from, $lte: date_published_to };
+    let date_published_from = req.body.date_published_from ?? '2000-01-01';
+    date_published_from = new Date(date_published_from);
 
-    // console.log(moQuery);
+    let date_published_to = req.body.date_published_to ?? timeLib.getCurrentYYYYMMDD();
+    date_published_to = new Date(date_published_to);
 
-    const results = await theparking_eu_model.list(moQuery, limit, skip, sort);
+    where.date_published = {
+      [Op.between]: [date_published_from, date_published_to]
+    };
 
-    res.json(results);
+    // console.log(where);
+
+    const order = [order1];
+
+    const db = global.api.postgreSQL;
+    const carsMD = db.sequelize.models['carsMD'];
+    const { count, rows } = await carsMD.findAndCountAll({ where, limit, offset, order });
+
+    res.json({
+      success: true,
+      count,
+      data: rows,
+      where
+    });
+
 
   } catch (err) {
+    console.log(err);
     next(err);
   }
 

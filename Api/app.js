@@ -7,7 +7,6 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./middlewares/swaggerDocs.js');
 
 const cors = require('./middlewares/cors.js');
-const mongooseDriver = require('./middlewares/mongodb/mongooseDriver.js');
 const { defineStrategy4api } = require('./middlewares/auth/passportstrategy_bearer.js');
 const logErrorApi = require('./middlewares/logErrorApi.js');
 
@@ -19,8 +18,6 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors);
 
-// mongoose
-mongooseDriver.connectDefault(process.env.MONGODB_URI);
 
 // auth middlewares
 app.use(passport.initialize()); // initialize passport module
@@ -29,7 +26,7 @@ defineStrategy4api();
 
 
 /***** GLOBAL  ****/
-app.use((req, res, next) => { global.ms_api.req = req; global.ms_api.res = res; next(); }); // save req to global variable for use in logErrorApi.js
+app.use((req, res, next) => { global.api.req = req; global.api.res = res; next(); }); // save req to global variable for use in logErrorApi.js
 
 
 
