@@ -26,7 +26,6 @@ module.exports = async (req, res, next) => {
     const limit = req.query.limit > 50 ? 50 : +req.query.limit;
     const offset = +req.query.offset || 0;
     const order1 = req.query.order || ['crawled_at', 'ASC'];
-    console.log(req.query);
 
     const where = {};
     if (!!req.body.make) { where.make = { [Op.iLike]: `%${req.body.make}%` }; }
