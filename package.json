@@ -11,9 +11,9 @@
   ],
   "scripts": {
     "inst": "rm -rf node_modules && rm package-lock.json && npm install",
-    "dev": "export NODE_ENV=lokal && nodemon starter.js",
-    "development": "export PORT=3138 && export NODE_ENV=development && pm2 start starter.js --name autoyard-api",
-    "deploy": "export PORT=3138 && export NODE_ENV=production && pm2 start starter.js --name autoyard-api"
+    "dev": "export API_ENV=lokal && nodemon starter.js",
+    "development": "export PORT=3138 && export API_ENV=development && pm2 start starter.js --name autoyard-api",
+    "deploy": "export PORT=3138 && export API_ENV=production && pm2 start starter.js --name autoyard-api"
   },
   "dependencies": {
     "chalk": "^4.1.1",
