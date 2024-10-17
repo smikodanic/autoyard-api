@@ -17,7 +17,10 @@ const loadSwaggerDocs = (directory) => {
     },
     paths: {},
     servers: [
-      { url: process.env.API_ENV === 'development' ? 'http://localhost:3138' : 'http://38.242.251.114:3138' }
+      {
+        url: process.env.API_ENV === 'development' ? 'http://localhost:3138' : 'https://api.autoyard.eu/'
+        // url: process.env.API_ENV === 'development' ? 'http://localhost:3138' : 'http://38.242.251.114:3138'
+      }
     ]
   };
 
