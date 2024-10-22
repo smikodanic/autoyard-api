@@ -7,18 +7,21 @@ const timeLib = require('../../lib/timeLib.js');
  {
   "make": "Volkswagen",
   "model": "Golf",
-  "version": "Gte 1.4",
-  "location": "Slovenia",
-  "fuel": "Gasoline",
+  "version": "CONFORTLINE",
+  "location": "Hungary",
+  "price_from": 2000,
+  "price_to": 6000,
+  "has_image": true,
+  "fuel": "gasoline",
   "transmission": "manual",
-  "color": "red",
+  "color": "grey",
   "doors": "5",
   "year_from": 2000,
-  "year_to": 2010,
-  "ad_title": "vw golf",
-  "date_published_from": "2024-06-13"
-  "date_published_to": "2024-09-15"
- }
+  "year_to": 2023,
+  "ad_title": "volkswagen golf",
+  "date_published_from": "2024-06-13",
+  "date_published_from": "2024-10-15"
+}
  */
 module.exports = async (req, res, next) => {
 
@@ -31,12 +34,23 @@ module.exports = async (req, res, next) => {
     if (!!req.body.make) { where.make = { [Op.iLike]: `%${req.body.make}%` }; }
     if (!!req.body.model) { where.model = { [Op.iLike]: `%${req.body.model}%` }; }
     if (!!req.body.version) { where.version = { [Op.iLike]: `%${req.body.version}%` }; }
-    if (!!req.body.location) { where.location = { [Op.iLike]: `%${req.body.location}%` }; }
-    if (!!req.body.fuel) { where.fuel = { [Op.iLike]: `%${req.body.fuel}%` }; }
-    if (!!req.body.transmission) { where.transmission = { [Op.iLike]: `%${req.body.transmission}%` }; }
-    if (!!req.body.color) { where.color = { [Op.iLike]: `%${req.body.color}%` }; }
-    if (!!req.body.doors) { where.doors = { [Op.iLike]: `%${req.body.doors}%` }; }
+    if (!!req.body.location) { where.location = req.body.location; }
+    if (req.body.has_image !== true) { where.image_url = { [Op.eq]: null, [Op.eq]: '' }; }
+    if (!!req.body.fuel) { where.fuel = req.body.fuel; }
+    if (!!req.body.transmission) { where.transmission = req.body.transmission; }
+    if (!!req.body.color) { where.color = req.body.color; }
+    if (!!req.body.doors) { where.doors = req.body.doors; }
 
+
+    // price range
+    const price_from = req.body.price_from ?? 0;
+    const price_to = req.body.price_to ?? 1000000;
+    where.price = {
+      [Op.gte]: price_from,
+      [Op.lte]: price_to
+    };
+
+    // year range
     const year_from = req.body.year_from ?? 1900;
     const year_to = req.body.year_to ?? new Date().getFullYear();
     where.year = {
@@ -44,26 +58,29 @@ module.exports = async (req, res, next) => {
       [Op.lte]: year_to
     };
 
+    // ad_title contains
     if (!!req.body.ad_title) { where.ad_title = { [Op.iLike]: `%${req.body.ad_title}%` }; }
 
+    // date_published range
     let date_published_from = req.body.date_published_from ?? '2000-01-01';
     date_published_from = new Date(date_published_from);
-
     let date_published_to = req.body.date_published_to ?? timeLib.getCurrentYYYYMMDD();
     date_published_to = new Date(date_published_to);
-
     where.date_published = {
       [Op.between]: [date_published_from, date_published_to]
     };
 
-    // console.log(where);
+    console.log(where);
 
+    /* order */
     const order = [order1];
 
+    /* send request to DB */
     const db = global.api.postgreSQL;
     const carsMD = db.sequelize.models['carsMD'];
     const { count, rows } = await carsMD.findAndCountAll({ where, limit, offset, order });
 
+    /* send response */
     res.json({
       success: true,
       count,

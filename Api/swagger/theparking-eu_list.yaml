@@ -43,15 +43,27 @@ paths:
                   description: The car's model
                 version:
                   type: string
-                  example: 1.6
+                  example: CONFORTLINE
                   description: The car's version
                 location:
                   type: string
-                  example: Slovenia
+                  example: Hungary
                   description: The car's location
+                price_from:
+                  type: integer
+                  example: 1300
+                  description: Minimum price for filtering
+                price_to:
+                  type: integer
+                  example: 5500
+                  description: Maximum price for filtering
+                has_image:
+                  type: boolean
+                  example: true
+                  description: Filter to include only cars with images
                 fuel:
                   type: string
-                  example: diesel
+                  example: gasoline
                   description: The car's fuel type
                 transmission:
                   type: string
@@ -59,11 +71,11 @@ paths:
                   description: The car's transmission type
                 color:
                   type: string
-                  example: black
+                  example: grey
                   description: The car's color
                 doors:
                   type: string
-                  example: 5
+                  example: '5'
                   description: Number of doors
                 year_from:
                   type: integer
@@ -71,21 +83,19 @@ paths:
                   description: Filter for the year starting from
                 year_to:
                   type: integer
-                  example: 2022
+                  example: 2023
                   description: Filter for the year ending
                 ad_title:
                   type: string
-                  example: vw golf
+                  example: 'volkswagen golf'
                   description: The title of the car advertisement
                 date_published_from:
                   type: string
-                  format: date
-                  example: 2023-06-13
+                  example: 2024-06-13
                   description: Filter by date when the ad was published, starting from
                 date_published_to:
                   type: string
-                  format: date
-                  example: 2024-10-08
+                  example: 2024-10-22
                   description: Filter by date when the ad was published, ending
       responses:
         '200':
@@ -93,36 +103,52 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    _id:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 10
+                    description: Number of matching records found
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        _id:
+                          type: string
+                          description: Unique identifier for the car
+                        make:
+                          type: string
+                        model:
+                          type: string
+                        version:
+                          type: string
+                        location:
+                          type: string
+                        fuel:
+                          type: string
+                        transmission:
+                          type: string
+                        color:
+                          type: string
+                        doors:
+                          type: integer
+                        year:
+                          type: integer
+                        ad_title:
+                          type: string
+                        date_published:
+                          type: string
+                          format: date
+                  where:
+                    type: object
+                    description: The filter criteria used in the query
+                    additionalProperties:
                       type: string
-                      description: Unique identifier for the car
-                    make:
-                      type: string
-                    model:
-                      type: string
-                    version:
-                      type: string
-                    location:
-                      type: string
-                    fuel:
-                      type: string
-                    transmission:
-                      type: string
-                    color:
-                      type: string
-                    doors:
-                      type: integer
-                    year:
-                      type: integer
-                    ad_title:
-                      type: string
-                    date_published:
-                      type: string
-                      format: date
         '400':
           description: Bad request, invalid parameters
         '500':

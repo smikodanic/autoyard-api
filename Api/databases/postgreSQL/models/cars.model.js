@@ -9,19 +9,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     searchpage_num: {
       type: DataTypes.INTEGER,
-      allowNull: true,  // Adjust depending on whether this field is required
+      allowNull: true,
     },
     searchpage_url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(400),
       allowNull: false,
     },
     car_detail_url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(400),
       allowNull: false,
       unique: true,  // Add a unique constraint here for upsert()
     },
     redirect_url: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(400),
       allowNull: true,
     },
     make: {
@@ -36,6 +36,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
+    price: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    price_unit: {
+      type: DataTypes.STRING(5),
+      allowNull: true,
+      defaultValue: '€'
+    },
+    image_url: {
+      type: DataTypes.STRING(400),
+      allowNull: true,
+    },
     date_published: {
       type: DataTypes.DATE,
       allowNull: true,
@@ -48,9 +61,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    mileage: {
-      type: DataTypes.STRING,
-      allowNull: true,
+    mileage_km: {
+      type: DataTypes.INTEGER,
+      allowNull: true
     },
     year: {
       type: DataTypes.INTEGER,
@@ -73,7 +86,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     ad_title: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(400),
       allowNull: true,
     },
     crawled_at: {
