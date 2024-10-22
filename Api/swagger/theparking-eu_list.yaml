@@ -144,11 +144,9 @@ paths:
                         date_published:
                           type: string
                           format: date
-                  where:
+                  query:
                     type: object
                     description: The filter criteria used in the query
-                    additionalProperties:
-                      type: string
         '400':
           description: Bad request, invalid parameters
         '500':

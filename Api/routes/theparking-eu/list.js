@@ -20,7 +20,7 @@ const timeLib = require('../../lib/timeLib.js');
   "year_to": 2023,
   "ad_title": "volkswagen golf",
   "date_published_from": "2024-06-13",
-  "date_published_from": "2024-10-15"
+  "date_published_to": "2024-10-22"
 }
  */
 module.exports = async (req, res, next) => {
@@ -70,8 +70,6 @@ module.exports = async (req, res, next) => {
       [Op.between]: [date_published_from, date_published_to]
     };
 
-    console.log(where);
-
     /* order */
     const order = [order1];
 
@@ -85,7 +83,7 @@ module.exports = async (req, res, next) => {
       success: true,
       count,
       data: rows,
-      where
+      query: req.body
     });
 
 
