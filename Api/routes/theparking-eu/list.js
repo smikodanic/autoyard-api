@@ -35,11 +35,14 @@ module.exports = async (req, res, next) => {
     if (!!req.body.model) { where.model = { [Op.iLike]: `%${req.body.model}%` }; }
     if (!!req.body.version) { where.version = { [Op.iLike]: `%${req.body.version}%` }; }
     if (!!req.body.location) { where.location = req.body.location; }
-    if (req.body.has_image !== true) { where.image_url = { [Op.eq]: null, [Op.eq]: '' }; }
     if (!!req.body.fuel) { where.fuel = req.body.fuel; }
     if (!!req.body.transmission) { where.transmission = req.body.transmission; }
     if (!!req.body.color) { where.color = req.body.color; }
     if (!!req.body.doors) { where.doors = req.body.doors; }
+
+    // image
+    if (req.body.has_image === true) { where.image_url = { [Op.ne]: null, [Op.ne]: '' }; }
+    else if (req.body.has_image === false) { where.image_url = { [Op.eq]: null, [Op.eq]: '' }; }
 
 
     // price range
@@ -69,6 +72,7 @@ module.exports = async (req, res, next) => {
     where.date_published = {
       [Op.between]: [date_published_from, date_published_to]
     };
+
 
     /* order */
     const order = [order1];
