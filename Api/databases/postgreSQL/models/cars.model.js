@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(400),
       allowNull: true,
     },
+    external_url: {
+      type: DataTypes.STRING(400),
+      allowNull: true,
+    },
     make: {
       type: DataTypes.STRING,
       allowNull: false,
