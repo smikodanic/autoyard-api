@@ -1,0 +1,86 @@
+paths:
+  /theparking-eu/{car_id}:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve car details by car_id
+      description: Fetch detailed information about a specific car using its unique `car_id`.
+      parameters:
+        - in: path
+          name: car_id
+          required: true
+          schema:
+            type: integer
+          description: The unique identifier of the car
+      responses:
+        '200':
+          description: Car details successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  data:
+                    type: object
+                    description: The car details retrieved from the database
+                    properties:
+                      car_id:
+                        type: integer
+                        example: 12345
+                        description: The unique identifier of the car
+                      make:
+                        type: string
+                        example: Volkswagen
+                      model:
+                        type: string
+                        example: Golf
+                      version:
+                        type: string
+                        example: Gte 1.4
+                      price:
+                        type: integer
+                        example: 13000
+                        description: Price of the car
+                      location:
+                        type: string
+                        example: Slovenia
+                      fuel:
+                        type: string
+                        example: Gasoline
+                      transmission:
+                        type: string
+                        example: manual
+                      color:
+                        type: string
+                        example: red
+                      doors:
+                        type: integer
+                        example: 5
+                      year:
+                        type: integer
+                        example: 2022
+                      ad_title:
+                        type: string
+                        example: "Volkswagen Golf for sale"
+                      date_published:
+                        type: string
+                        format: date
+                        example: 2024-06-13
+                  query:
+                    type: object
+                    description: The `car_id` passed in the request
+                    properties:
+                      car_id:
+                        type: integer
+                        example: 12345
+                        description: The unique identifier passed in the request
+        '400':
+          description: Bad request, invalid `car_id` parameter
+        '404':
+          description: Car not found
+        '500':
+          description: Internal server error
