@@ -1,0 +1,42 @@
+paths:
+  /theparking-eu/locations:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve all distinct car locations
+      description: Fetches a list of unique car locations available in the database.
+      responses:
+        '200':
+          description: List of unique locations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 5
+                    description: The number of unique locations found
+                  data:
+                    type: array
+                    description: Array of unique locations
+                    items:
+                      type: string
+                      example: Germany
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"

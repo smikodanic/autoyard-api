@@ -1,0 +1,42 @@
+paths:
+  /theparking-eu/fuels:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve all distinct fuel types
+      description: Fetches a list of unique fuel types available in the cars table.
+      responses:
+        '200':
+          description: List of unique fuel types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 3
+                    description: The number of unique fuel types found
+                  data:
+                    type: array
+                    description: Array of unique fuel types
+                    items:
+                      type: string
+                      example: Gasoline
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"

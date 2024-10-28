@@ -1,0 +1,42 @@
+paths:
+  /theparking-eu/makes:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve all distinct car makes
+      description: Fetches a list of unique car makes from the database.
+      responses:
+        '200':
+          description: List of unique car makes
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 5
+                    description: The number of unique car makes found
+                  data:
+                    type: array
+                    description: Array of unique car makes
+                    items:
+                      type: string
+                      example: ["Volkswagen", "Audi"]
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"

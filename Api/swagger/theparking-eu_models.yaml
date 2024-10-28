@@ -1,0 +1,63 @@
+paths:
+  /theparking-eu/models:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve all distinct car models for a specified make
+      description: Fetches a list of unique car models based on the specified make.
+      parameters:
+        - in: query
+          name: make
+          required: true
+          schema:
+            type: string
+            example: Volkswagen
+          description: The make of the car to filter models by
+      responses:
+        '200':
+          description: List of unique car models for the specified make
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 5
+                    description: The number of unique car models found
+                  data:
+                    type: array
+                    description: Array of unique car models
+                    items:
+                      type: string
+                      example: Golf
+        '400':
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "The 'make' is not selected."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"

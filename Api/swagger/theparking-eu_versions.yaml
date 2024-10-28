@@ -1,0 +1,70 @@
+paths:
+  /theparking-eu/versions:
+    get:
+      tags:
+        - theparking.eu
+      summary: Retrieve all distinct versions for a specified make and model
+      description: Fetches a list of unique car versions based on the specified make and model.
+      parameters:
+        - in: query
+          name: make
+          required: true
+          schema:
+            type: string
+            example: Volkswagen
+          description: The make of the car to filter versions by
+        - in: query
+          name: model
+          required: true
+          schema:
+            type: string
+            example: Golf sw
+          description: The model of the car to filter versions by
+      responses:
+        '200':
+          description: List of unique car versions for the specified make and model
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                    description: Indicates if the request was successful
+                  count:
+                    type: integer
+                    example: 5
+                    description: The number of unique car versions found
+                  data:
+                    type: array
+                    description: Array of unique car versions
+                    items:
+                      type: string
+                      example: Gte 1.4
+        '400':
+          description: Bad request, missing or invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "The 'make' or 'model' is not selected."
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Internal server error"
