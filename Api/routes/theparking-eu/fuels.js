@@ -13,6 +13,7 @@ module.exports = async (req, res, next) => {
     const carsMD = db.sequelize.models['carsMD'];
     const fuels = await carsMD.findAll({
       attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('fuel'), 'TEXT')), 'fuel']],
+      order: [[Sequelize.col('fuel'), 'ASC']],
       raw: true
     });
     const fuel_arr = fuels.map(item => item.fuel).filter(item => item !== '-');

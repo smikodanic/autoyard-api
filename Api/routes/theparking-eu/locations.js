@@ -13,6 +13,7 @@ module.exports = async (req, res, next) => {
     const carsMD = db.sequelize.models['carsMD'];
     const locations = await carsMD.findAll({
       attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('location'), 'TEXT')), 'location']],
+      order: [[Sequelize.col('location'), 'ASC']],
       raw: true
     });
     const location_arr = locations.map(item => item.location).filter(item => item !== '-');

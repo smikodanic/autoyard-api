@@ -18,6 +18,7 @@ module.exports = async (req, res, next) => {
     const categories = await carsMD.findAll({
       attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('category'), 'TEXT')), 'category']],
       where: { make, model },
+      order: [[Sequelize.col('category'), 'ASC']],
       raw: true
     });
     const categories_arr = categories.map(item => item.category).filter(item => !!item && item !== '-');

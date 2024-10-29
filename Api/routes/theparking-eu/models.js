@@ -15,6 +15,7 @@ module.exports = async (req, res, next) => {
     const carsMD = db.sequelize.models['carsMD'];
     const models = await carsMD.findAll({
       attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('model'), 'TEXT')), 'model']],
+      order: [[Sequelize.col('model'), 'ASC']],
       where: { make },
       raw: true
     });

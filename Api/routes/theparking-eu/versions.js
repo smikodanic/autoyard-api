@@ -18,6 +18,7 @@ module.exports = async (req, res, next) => {
     const versions = await carsMD.findAll({
       attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('version'), 'TEXT')), 'version']],
       where: { make, model },
+      order: [[Sequelize.col('version'), 'ASC']],
       raw: true
     });
     const versions_arr = versions.map(item => item.version);
