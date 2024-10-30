@@ -3,7 +3,7 @@ const timeLib = require('../../lib/timeLib.js');
 
 
 /**
- * POST /theparking-eu/list?limit=10&offset=0&sort=updated_at
+ * POST /theparking-eu/list?limit=10&offset=0&order=updated_at
  {
   "make": "Volkswagen",
   "model": "Golf",
