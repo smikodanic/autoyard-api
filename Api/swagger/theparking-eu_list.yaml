@@ -25,7 +25,7 @@ paths:
           schema:
             type: string
             example: updated_at
-          description: Field by which to sort (order) the results
+          description: Field by which to sort the results in ascending order
       requestBody:
         required: true
         content:
