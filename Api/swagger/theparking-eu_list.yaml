@@ -7,25 +7,32 @@ paths:
       parameters:
         - in: query
           name: limit
-          required: true
+          required: false
           schema:
             type: integer
             example: 10
           description: Number of results to return
         - in: query
           name: offset
-          required: true
+          required: false
           schema:
             type: integer
             example: 0
           description: Number of results to skip (offset) - use for pagination
         - in: query
           name: order
-          required: true
+          required: false
           schema:
             type: string
-            example: updated_at
-          description: Field by which to sort the results in ascending order
+            example: crawled_at
+          description: Field by which to sort the results in ascending (ASC) or descending (DESC) order
+        - in: query
+          name: order_type
+          required: false
+          schema:
+            type: string
+            example: DESC
+          description: Use ASC for ascending or DESC for descending sort order.
       requestBody:
         required: true
         content:

@@ -3,7 +3,7 @@ const timeLib = require('../../lib/timeLib.js');
 
 
 /**
- * POST /theparking-eu/list?limit=10&offset=0&order=updated_at
+ * POST /theparking-eu/list?limit=10&offset=0&order=crawled_at&order_type=DESC
  {
   "make": "Volkswagen",
   "model": "Golf",
@@ -28,7 +28,8 @@ module.exports = async (req, res, next) => {
   try {
     const limit = req.query.limit > 50 ? 50 : +req.query.limit;
     const offset = +req.query.offset || 0;
-    const order1 = req.query.order || ['crawled_at', 'ASC'];
+    const order1 = req.query.order || 'crawled_at';
+    const order_type = req.query.order_type || 'ASC';
 
     const where = {};
     if (!!req.body.make) { where.make = { [Op.iLike]: `%${req.body.make}%` }; }
@@ -75,7 +76,7 @@ module.exports = async (req, res, next) => {
 
 
     /* order */
-    const order = [order1];
+    const order = [[order1, order_type]];
 
     /* send request to DB */
     const db = global.api.postgreSQL;
