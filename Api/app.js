@@ -34,7 +34,7 @@ app.use((req, res, next) => { global.api.req = req; global.api.res = res; next()
 app.use('/info', require('./routes/info.js'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/theparking-eu', require('./routes/theparking-eu/index.js'));
-
+app.use('/stat', require('./routes/stat/index.js'));
 
 
 

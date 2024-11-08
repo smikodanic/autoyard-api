@@ -1,0 +1,71 @@
+paths:
+  /stat/crawled-per-day:
+    get:
+      tags:
+        - stat
+      summary: Count crawled cars per day for a given year and month
+      description: Counts the number of scraped cars per day in a specified year based on the "crawled_at" field.
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 2024
+          description: The year for which to retrieve the count of cars per day.
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 11
+          description: The month for which to retrieve the count of cars per day.
+      responses:
+        '200':
+          description: A list of days with the count of scraped cars for each day.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                          format: date
+                          example: '2024-01-01'
+                        count:
+                          type: integer
+                          example: 120
+        '400':
+          description: Missing year parameter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'Year parameter is required'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'An error occurred while processing your request'
