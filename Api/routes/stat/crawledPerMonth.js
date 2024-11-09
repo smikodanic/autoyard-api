@@ -46,6 +46,7 @@ ORDER BY
 
     res.json({
       success: true,
+      query: req.query,
       data: countPerMonth
     });
 

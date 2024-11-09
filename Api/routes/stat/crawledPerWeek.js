@@ -1,10 +1,8 @@
 const { Sequelize } = require('sequelize');
 
-
-
 /**
- * GET /stat/crawled-per-day?year=2024&month=10
- * Count number of scraped cars per day for a given year and month. Uses the "crawled_at" field.
+ * GET /stat/crawled-per-week?year=2024&month=10
+ * Count number of scraped cars per week for a given year and month using the "crawled_at" field.
  */
 module.exports = async (req, res, next) => {
   try {
@@ -15,20 +13,22 @@ module.exports = async (req, res, next) => {
     const db = global.api.postgreSQL;
     const carsMD = db.sequelize.models['carsMD'];
 
-    // Perform the query to count cars per day in the specified year
+    // Perform the query to count cars per week in the specified year and month
     /*
 SELECT
-  DATE(crawled_at) AS day,
+  DATE_TRUNC('week', crawled_at) AS week,
   COUNT(car_id) AS count
 FROM cars
 WHERE EXTRACT(YEAR FROM crawled_at) = :year
-GROUP BY day
-ORDER BY day ASC;
+  AND EXTRACT(MONTH FROM crawled_at) = :month
+GROUP BY week
+ORDER BY week ASC;
+
     */
-    const countPerDay = await carsMD.findAll({
+    const countPerWeek = await carsMD.findAll({
       attributes: [
-        [Sequelize.fn('DATE', Sequelize.col('crawled_at')), 'day'], // Extract day from crawled_at: DATE(crawled_at) AS day
-        [Sequelize.fn('COUNT', Sequelize.col('car_id')), 'count'] // Count car_id per day: COUNT(car_id) AS count
+        [Sequelize.fn('DATE_TRUNC', 'week', Sequelize.col('crawled_at')), 'week'], // Group by start of the week
+        [Sequelize.fn('COUNT', Sequelize.col('car_id')), 'count'] // Count car_id per week
       ],
       where: {
         [Sequelize.Op.and]: [
@@ -36,8 +36,8 @@ ORDER BY day ASC;
           Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "crawled_at"')), month)
         ]
       },
-      group: ['day'],
-      order: [[Sequelize.literal('day'), 'ASC']],
+      group: ['week'],
+      order: [[Sequelize.literal('week'), 'ASC']],
       raw: true
     });
 
@@ -45,13 +45,11 @@ ORDER BY day ASC;
     res.json({
       success: true,
       query: req.query,
-      data: countPerDay
+      data: countPerWeek
     });
 
   } catch (err) {
     console.log(err);
     next(err);
   }
-
 };
-

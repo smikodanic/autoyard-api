@@ -1,0 +1,84 @@
+paths:
+  /stat/crawled-per-week:
+    get:
+      tags:
+        - stat
+      summary: Count the number of scraped cars per week for a specified year and month
+      description: Returns the count of cars scraped per week, grouped by the start of each week in the specified year and month based on the `crawled_at` field.
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 2024
+          description: The year to filter by (e.g., `2024`).
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 12
+            example: 10
+          description: The month to filter by (1 = January, 12 = December).
+      responses:
+        '200':
+          description: A JSON object containing the count of scraped cars per week for the specified year and month.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  query:
+                    type: object
+                    properties:
+                      year:
+                        type: integer
+                        example: 2024
+                      month:
+                        type: integer
+                        example: 10
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        week:
+                          type: string
+                          format: date
+                          example: "2024-10-01T00:00:00.000Z"
+                          description: Start of the week.
+                        count:
+                          type: integer
+                          example: 15
+                          description: Number of cars crawled during this week.
+        '400':
+          description: Bad Request - Invalid or missing parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "The 'year' and 'month' parameters are required."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "An error occurred while processing the request."
