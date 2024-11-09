@@ -1,0 +1,65 @@
+paths:
+  /stat/crawled-per-month:
+    get:
+      tags:
+        - stat
+      summary: Count scraped cars per month for a specified year
+      description: Returns the number of scraped cars per month for a given year based on the `crawled_at` field.
+      parameters:
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 2024
+          description: The year to filter the results by.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        month:
+                          type: integer
+                          description: The month of the year (1-12).
+                          example: 1
+                        count:
+                          type: integer
+                          description: The count of cars scraped in the given month.
+                          example: 150
+        '400':
+          description: Invalid input (missing or invalid year parameter)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Year parameter is required"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Internal server error"

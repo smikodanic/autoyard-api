@@ -1,40 +1,6 @@
 const { Sequelize } = require('sequelize');
 
 
-/**
- * GET /stat/count-per-day?year=2024
- * Count number of scraped cars per day for a given year. Use field "crawled_at".
- */
-module.exports = async (req, res, next) => {
-
-  try {
-
-    /* send request to DB */
-    const db = global.api.postgreSQL;
-    const carsMD = db.sequelize.models['carsMD'];
-    const fuels = await carsMD.findAll({
-      attributes: [[Sequelize.fn('DISTINCT', Sequelize.cast(Sequelize.col('fuel'), 'TEXT')), 'fuel']],
-      order: [[Sequelize.col('fuel'), 'ASC']],
-      raw: true
-    });
-    const fuel_arr = fuels.map(item => item.fuel).filter(item => item !== '-');
-
-    const count = fuels?.length ?? 0;
-
-    /* send response */
-    res.json({
-      success: true,
-      count,
-      data: fuel_arr
-    });
-
-  } catch (err) {
-    console.log(err);
-    next(err);
-  }
-
-};
-
 
 /**
  * GET /stat/crawled-per-day?year=2024&month=10
