@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const { format } = require('date-fns');
 
 /**
  * GET /stat/crawled-per-week?year=2024&month=10
@@ -23,7 +24,6 @@ WHERE EXTRACT(YEAR FROM crawled_at) = :year
   AND EXTRACT(MONTH FROM crawled_at) = :month
 GROUP BY week
 ORDER BY week ASC;
-
     */
     const countPerWeek = await carsMD.findAll({
       attributes: [
@@ -40,12 +40,31 @@ ORDER BY week ASC;
       order: [[Sequelize.literal('week'), 'ASC']],
       raw: true
     });
+    /*
+countPerWeek::
+[
+  { week: 2024-10-21T00:00:00.000Z, count: '1917' },
+  { week: 2024-10-28T00:00:00.000Z, count: '2815' }
+]
+    */
+
+    // Format the response to include start and end dates of each week
+    const data = countPerWeek.map(({ week, count }) => {
+      const startOfWeek = new Date(week);
+      const endOfWeek = new Date(startOfWeek);
+      endOfWeek.setDate(startOfWeek.getDate() + 6);
+
+      return {
+        week: `${format(startOfWeek, 'yyyy-MM-dd')},${format(endOfWeek, 'yyyy-MM-dd')}`,
+        count
+      };
+    });
 
     // Send the response
     res.json({
       success: true,
       query: req.query,
-      data: countPerWeek
+      data
     });
 
   } catch (err) {
