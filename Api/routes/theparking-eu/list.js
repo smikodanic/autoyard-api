@@ -11,6 +11,8 @@ const timeLib = require('../../lib/timeLib.js');
   "location": "Hungary",
   "price_from": 2000,
   "price_to": 6000,
+  "mileage_from": 10000,
+  "mileage_to": 239500,
   "has_image": true,
   "fuel": "gasoline",
   "transmission": "manual",
@@ -52,6 +54,14 @@ module.exports = async (req, res, next) => {
     where.price = {
       [Op.gte]: price_from,
       [Op.lte]: price_to
+    };
+
+    // mileage range
+    const mileage_from = req.body.mileage_from ?? 0;
+    const mileage_to = req.body.mileage_to ?? 1000000;
+    where.mileage_km = {
+      [Op.gte]: mileage_from,
+      [Op.lte]: mileage_to
     };
 
     // year range

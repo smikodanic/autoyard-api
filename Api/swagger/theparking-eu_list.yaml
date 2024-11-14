@@ -64,6 +64,14 @@ paths:
                   type: integer
                   example: 5500
                   description: Maximum price for filtering
+                mileage_from:
+                  type: integer
+                  example: 10000
+                  description: Minimum mileage for filtering
+                mileage_to:
+                  type: integer
+                  example: 1000000
+                  description: Maximum mileage for filtering
                 has_image:
                   type: boolean
                   example: true
@@ -136,6 +144,14 @@ paths:
                           type: string
                         location:
                           type: string
+                        price:
+                          type: integer
+                          example: 1300
+                        mileage:
+                          type: integer
+                          example: 65000
+                        has_image:
+                          type: boolean
                         fuel:
                           type: string
                         transmission:
@@ -143,9 +159,11 @@ paths:
                         color:
                           type: string
                         doors:
-                          type: integer
+                          type: string
+                          example: "5"
                         year:
                           type: integer
+                          example: 2021
                         ad_title:
                           type: string
                         date_published:
