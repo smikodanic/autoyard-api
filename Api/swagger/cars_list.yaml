@@ -1,0 +1,190 @@
+paths:
+  /cars/list:
+    post:
+      tags:
+        - cars
+      summary: Get a filtered and sorted list of cars.
+      parameters:
+        - name: limit
+          in: query
+          description: 'Maximum number of cars to return (default: 10, max: 50).'
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: offset
+          in: query
+          description: 'Number of cars to skip (default: 0).'
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: order
+          in: query
+          description: 'Field to order the results by (default: created_at).'
+          required: false
+          schema:
+            type: string
+            default: created_at
+        - name: order_type
+          in: query
+          description: 'Order direction (ASC or DESC, default: ASC).'
+          required: false
+          schema:
+            type: string
+            default: ASC
+      requestBody:
+        description: Filters and search options for the cars list.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                ad_title_contains:
+                  type: string
+                  description: Search for cars whose ad title contains this text.
+                  example: VW
+                ad_text_contains:
+                  type: string
+                  description: Search for cars whose ad description contains this text.
+                  example: Passat
+                ad_date_from:
+                  type: string
+                  description: Filter ads from this date (inclusive).
+                  example: '2024-10-01'
+                ad_date_to:
+                  type: string
+                  description: Filter ads up to this date (inclusive).
+                  example: '2024-12-01'
+                make_id:
+                  type: integer
+                  description: ID of the car make.
+                model_id:
+                  type: integer
+                  description: ID of the car model.
+                version:
+                  type: string
+                  description: Version or trim level of the car.
+                  example: ''
+                fuel:
+                  type: string
+                  description: Fuel type (e.g., gasoline, diesel).
+                  example: 'gasoline'
+                mileage_km_from:
+                  type: integer
+                  description: Minimum mileage in kilometers.
+                  example: 1000
+                mileage_km_to:
+                  type: integer
+                  description: Maximum mileage in kilometers.
+                  example: 23000
+                power_kw_from:
+                  type: integer
+                  description: Minimum power in kilowatts.
+                  example: 70
+                power_kw_to:
+                  type: integer
+                  description: Maximum power in kilowatts.
+                  example: 180
+                engine_cc_from:
+                  type: integer
+                  description: Minimum engine capacity in cubic centimeters.
+                  example: 0
+                engine_cc_to:
+                  type: integer
+                  description: Maximum engine capacity in cubic centimeters.
+                  example: 10000
+                year_from:
+                  type: integer
+                  description: Minimum manufacturing year.
+                  example: 2000
+                year_to:
+                  type: integer
+                  description: Maximum manufacturing year.
+                  example: 2024
+                transmission:
+                  type: string
+                  description: Transmission type (e.g., manual, automatic).
+                  example: manual
+                color:
+                  type: string
+                  description: Color of the car.
+                  example: red
+                doors:
+                  type: string
+                  description: Number of doors.
+                  example: 5
+                country:
+                  type: string
+                  description: Country where the car is located.
+                  example: Germany
+                price_EUR_from:
+                  type: integer
+                  description: Minimum price in EUR.
+                  example: 200.00
+                price_EUR_to:
+                  type: integer
+                  description: Maximum price in EUR.
+                  example: 2000.00
+                has_image:
+                  type: boolean
+                  description: Filter cars with or without images.
+                  example: true
+      responses:
+        '200':
+          description: Successful response with a list of cars.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  count:
+                    type: integer
+                    description: Total number of cars matching the filters.
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        ad_title:
+                          type: string
+                        ad_date:
+                          type: string
+                          format: date
+                        make:
+                          type: string
+                        model:
+                          type: string
+                        version:
+                          type: string
+                        fuel:
+                          type: string
+                        mileage_km:
+                          type: integer
+                        power_kw:
+                          type: integer
+                        engine_cc:
+                          type: integer
+                        year:
+                          type: integer
+                        transmission:
+                          type: string
+                        color:
+                          type: string
+                        doors:
+                          type: string
+                        country:
+                          type: string
+                        price:
+                          type: integer
+                        image_url:
+                          type: string
+        '400':
+          description: Bad request.
+        '500':
+          description: Internal server error.

@@ -18,7 +18,7 @@ module.exports.defineStrategy4api = () => {
   passport.use('bearer-api', new BearerStrategy(async (token, done) => {
     // console.log('Bearer token (Joint API)):: ', token);
 
-    if (token != process.env.AUTHTOKEN) { // when user is not found
+    if (token != process.env.API_TOKEN) { // when user is not found
       const err = new Error('Bad API Token.');
       err.status = 403;
       done(err, false);

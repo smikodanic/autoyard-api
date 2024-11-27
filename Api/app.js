@@ -35,6 +35,7 @@ app.use('/info', require('./routes/info.js'));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use('/sys', require('./routes/sys/index.js'));
 app.use('/stat', require('./routes/stat/index.js'));
+app.use('/cars', require('./routes/cars/index.js'));
 app.use('/theparking-eu', require('./routes/theparking-eu/index.js'));
 
 

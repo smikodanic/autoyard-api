@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Cars = sequelize.define('Cars', {
+  const Cars = sequelize.define('carsMD', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -71,7 +71,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(255),
       allowNull: true,
     },
-    price_EUR: {
+    price_eur: {
       type: DataTypes.NUMERIC(10, 2),
       allowNull: true,
     },
