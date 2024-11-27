@@ -1,107 +1,114 @@
 module.exports = (sequelize, DataTypes) => {
-
-  return sequelize.define('carsMD', {
-    car_id: {
+  const Cars = sequelize.define('Cars', {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      allowNull: false,
-      primaryKey: true
+      primaryKey: true,
+      allowNull: false
     },
-    searchpage_num: {
+    ad_url: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      unique: true
+    },
+    ad_title: {
+      type: DataTypes.TEXT,
+      allowNull: false
+    },
+    ad_text: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    ad_date: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    make_id: {
       type: DataTypes.INTEGER,
-      allowNull: true,
-    },
-    searchpage_url: {
-      type: DataTypes.STRING(400),
       allowNull: false,
     },
-    car_detail_url: {
-      type: DataTypes.STRING(400),
-      allowNull: false,
-      unique: true,  // Add a unique constraint here for upsert()
-    },
-    redirect_url: {
-      type: DataTypes.STRING(400),
-      allowNull: true,
-    },
-    external_url: {
-      type: DataTypes.STRING(400),
-      allowNull: true,
-    },
-    make: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    model: {
-      type: DataTypes.STRING,
+    model_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     version: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    price: {
-      type: DataTypes.INTEGER,
-      allowNull: true
-    },
-    price_unit: {
-      type: DataTypes.STRING(5),
-      allowNull: true,
-      defaultValue: '€'
-    },
-    image_url: {
-      type: DataTypes.STRING(400),
-      allowNull: true,
-    },
-    date_published: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
-    location: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(100),
       allowNull: true,
     },
     fuel: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     mileage_km: {
       type: DataTypes.INTEGER,
-      allowNull: true
+      allowNull: true,
     },
-    year: {
+    power_kw: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    engine_cc: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    year: {
+      type: DataTypes.SMALLINT,
+      allowNull: true,
+    },
     transmission: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     color: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(50),
       allowNull: true,
     },
     doors: {
-      type: DataTypes.STRING,
+      type: DataTypes.SMALLINT,
       allowNull: true,
     },
-    category: {
-      type: DataTypes.STRING,
+    country: {
+      type: DataTypes.STRING(255),
       allowNull: true,
     },
-    ad_title: {
-      type: DataTypes.STRING(400),
+    price_EUR: {
+      type: DataTypes.NUMERIC(10, 2),
       allowNull: true,
     },
-    crawled_at: {
+    image_url: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    created_at: {
       type: DataTypes.DATE,
-      allowNull: false,
       defaultValue: DataTypes.NOW,
-      primaryKey: true
-    }
+      allowNull: false,
+    },
+    scraper_table_row: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
   }, {
-    tableName: 'scraper_theparking_eu',
-    timestamps: false,
+    tableName: 'cars',
+    timestamps: false, // Set to false if you don't want Sequelize to add timestamps automatically
   });
 
+  // Defining associations
+  Cars.associate = (models) => {
+    // A car belongs to one make
+    Cars.belongsTo(models.makes, {
+      foreignKey: 'make_id',
+      targetKey: 'make_id',
+      as: 'make',
+    });
+
+    // A car belongs to one model
+    Cars.belongsTo(models.models, {
+      foreignKey: 'model_id',
+      targetKey: 'model_id',
+      as: 'model',
+    });
+  };
+
+  return Cars;
 };

@@ -1,0 +1,45 @@
+paths:
+  /sys/makes:
+    get:
+      tags:
+        - sys
+      summary: Get all car makes
+      description: Retrieves a list of all car makes from the database, ordered alphabetically by name.
+      responses:
+        '200':
+          description: A list of car makes sorted alphabetically by name.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 5
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        make_id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: 'Toyota'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'An error occurred while fetching the makes'

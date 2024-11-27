@@ -1,0 +1,69 @@
+paths:
+  /sys/models:
+    get:
+      tags:
+        - sys
+      summary: Retrieve models for a specific car make
+      description: This endpoint retrieves a list of car models associated with a specific make, based on the `make_id` query parameter.
+      parameters:
+        - name: make_id
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 12
+          description: The `make_id` of the car make for which to retrieve models.
+      responses:
+        '200':
+          description: A list of car models for the specified make
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    example: 3
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        model_id:
+                          type: integer
+                          example: 1
+                        name:
+                          type: string
+                          example: "Corolla"
+                        make_id:
+                          type: integer
+                          example: 12
+        '400':
+          description: Missing or invalid `make_id` query parameter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'make_id query parameter is required'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 'An error occurred while processing your request'

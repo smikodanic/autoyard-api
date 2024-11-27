@@ -1,0 +1,140 @@
+Abarth
+Acura
+Aixam
+Alfa romeo
+Alpina
+Alpine
+Alvis
+Amc
+Aro
+Aston martin
+Audi
+Baic
+Bentley
+Besturn
+Bmw
+Bogdan
+Brabus
+Brilliance
+Bugatti
+Buick
+Byd
+Cadillac
+Chery
+Chevrolet
+Chrysler
+Citroen
+Corvette
+Cupra
+Dacia
+Daewoo
+Daihatsu
+Daimler
+Datsun
+De tomaso
+Delorean
+Denza
+Dfsk
+Dodge
+Dongfeng
+Dr motor
+Excalibur
+Ferrari
+Fiat
+Fisker
+Ford
+Freightliner
+Gac motor
+Gaz
+Geely
+Genesis
+Gmc
+Great wall motors
+Haima
+Haval
+Hawtai
+Hino motors
+Hiphi
+Honda
+Hotchkiss
+Hummer
+Hyundai
+Ineos
+Infiniti
+International harvester
+Isuzu
+Iveco
+Izh
+Jac
+Jaguar
+Jeep
+Kia
+Knaus
+Lada
+Lamborghini
+Lancia
+Land rover
+Lexus
+Lifan
+Ligier
+Lincoln
+Lynk and co
+Mack
+Mahindra
+Maserati
+Maybach
+Mazda
+Mc laren
+Mercedes
+Mercury
+Mg
+Microcar
+Mini
+Mitsubishi
+Morelo
+Moskvich
+Nio
+Nissan
+Oldsmobile
+Opel
+Packard
+Peugeot
+Piaggio
+Plymouth
+Polestar
+Pontiac
+Porsche
+Ram trucks
+Ravon
+Renault
+Rolls royce
+Rover
+Saab
+Saturn
+Scion
+Seat
+Skoda
+Smart
+Ssangyong
+Steyr
+Subaru
+Suzuki
+Tata
+Tesla
+Tofas
+Toyota
+Trabant
+Triumph
+Uaz
+Vauxhall
+Volkswagen
+Volvo
+Vortex
+Wartburg
+Wey
+Willys
+Zastava
+Zaz
+Zeekr
+Zotye
+Zx auto

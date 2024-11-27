@@ -1,8 +1,12 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const chalk = require('chalk');
 
-// models
+//// PostgreSQL models
+const makes_model = require('./models/makes.model.js');
+const models_model = require('./models/models.model.js');
 const cars_model = require('./models/cars.model.js');
+// scrapers
+const scraper_theparking_eu_model = require('./models/scraper_theparking_eu.model.js');
 
 
 class PostgreSQL {
@@ -42,7 +46,11 @@ class PostgreSQL {
    * Define models
    */
   defineModels() {
+    makes_model(this.sequelize, DataTypes);
+    models_model(this.sequelize, DataTypes);
     cars_model(this.sequelize, DataTypes);
+
+    scraper_theparking_eu_model(this.sequelize, DataTypes);
   }
 
 
