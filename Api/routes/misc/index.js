@@ -2,11 +2,9 @@ const express = require('express');
 const router = express.Router();
 const authHand = require('../_handlers/authHand.js');
 
-const list = require('./list.js');
+const info = require('./info.js');
 
-
-router.post('/list', list);
-
+router.get('/info', info);
 
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app.js');
 
-const StringExt = require('./lib/StringExt');
+const StringExt = require('./lib/StringExt.js');
 new StringExt();
 
 

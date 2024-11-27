@@ -1,8 +1,8 @@
 paths:
-  /info:
+  /misc/info:
     get:
       tags:
-        - general
+        - misc
       summary: Retrieve an API info.
       responses:
         200:

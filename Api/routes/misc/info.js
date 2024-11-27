@@ -1,5 +1,5 @@
-const timeLib = require('../lib/timeLib.js');
-const pkg = require('../../package.json');
+const timeLib = require('../../lib/timeLib.js');
+const pkg = require('../../../package.json');
 
 
 module.exports = (req, res) => {
