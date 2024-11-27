@@ -65,6 +65,7 @@ CREATE TABLE public.scraper_theparking_eu (
 	ad_title varchar(400) NULL,
 	crawled_at timestamptz NOT NULL,
 	external_url varchar(400) NULL,
+  transfered bool NOT NULL DEFAULT false, -- become true when row is transfered to the "cars" table
 	CONSTRAINT scraper_theparking_eu_car_detail_url_key UNIQUE (car_detail_url),
 	CONSTRAINT scraper_theparking_eu_pkey PRIMARY KEY (car_id, crawled_at)
 );

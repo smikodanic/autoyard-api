@@ -98,7 +98,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: DataTypes.NOW,
       primaryKey: true
-    }
+    },
+    transfered: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   }, {
     tableName: 'scraper_theparking_eu',
     timestamps: false,

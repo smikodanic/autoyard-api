@@ -112,13 +112,8 @@ module.exports = async (req, res, next) => {
     /* order */
     const order = [[order1, order_type]];
 
-    // debug
-    console.log('where:', where);
-    console.log('order:', order);
-
     /* send request to DB */
     const db = global.api.postgreSQL;
-    console.log('models::', Object.keys(db.sequelize.models));
     const carsMD = db.sequelize.models['carsMD'];
     const { count, rows } = await carsMD.findAndCountAll({ where, limit, offset, order });
 
