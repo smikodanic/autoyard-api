@@ -100,7 +100,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     }
   }, {
-    tableName: 'cars',
+    tableName: 'scraper_theparking_eu',
     timestamps: false,
   });
 
