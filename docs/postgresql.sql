@@ -103,6 +103,10 @@ WHERE
 ALTER SEQUENCE cars_car_id_seq OWNED BY scraper_theparking_eu.car_id;
 
 
+SQL TRUNCATE TABLE table_name;
 DROP TABLE cars;                           -- drop table
 SELECT COUNT(id) FROM cars;                -- count table
 SELECT DISTINCT make FROM scraper_theparking_eu; -- distinct select
+
+-- dumps (run from local computer)
+$ pg_dump -h 38.242.251.114 -U carfinder -d autoyard -t makes > makes_dump.sql
