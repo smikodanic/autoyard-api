@@ -109,5 +109,12 @@ DROP TABLE cars;                           -- drop table
 SELECT COUNT(id) FROM cars;                -- count table
 SELECT DISTINCT make FROM scraper_theparking_eu; -- distinct select
 
+-- copy distinct from one table to another
+INSERT INTO fuels (name)
+SELECT DISTINCT fuel
+FROM scraper_theparking_eu
+WHERE fuel IS NOT null and fuel <> '-'
+ON CONFLICT (name) DO NOTHING;
+
 -- dumps (run from local computer)
 $ pg_dump -h 38.242.251.114 -U carfinder -d autoyard -t makes > makes_dump.sql

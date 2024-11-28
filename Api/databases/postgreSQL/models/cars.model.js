@@ -1,3 +1,28 @@
+const fuelTypes = [
+  'gasoline',
+  'diesel',
+  'electric',
+  'hydrogen',
+  'hybrid',
+  'ethanol',
+  'methanol',
+  'solar',
+  'LPG (Liquefied Petroleum Gas)',
+  'NGV (Natural Gas Vehicle)',
+  'CNG (Compressed Natural Gas)',
+  'PHEV (Plug In Hybrid Electric Vehicle)',
+  'DME (Dimethyl Ether)',
+  'other'
+];
+
+
+const transmissionTypes = [
+  'manual',
+  'automatic',
+  'other'
+];
+
+
 module.exports = (sequelize, DataTypes) => {
   const Cars = sequelize.define('carsMD', {
     id: {
@@ -36,7 +61,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     fuel: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM(...fuelTypes),
       allowNull: true,
     },
     mileage_km: {
@@ -56,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
     },
     transmission: {
-      type: DataTypes.STRING(50),
+      type: DataTypes.ENUM(...transmissionTypes),
       allowNull: true,
     },
     color: {
@@ -67,8 +92,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.SMALLINT,
       allowNull: true,
     },
-    country: {
-      type: DataTypes.STRING(255),
+    country_id: {
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
     price_eur: {
@@ -108,7 +133,17 @@ module.exports = (sequelize, DataTypes) => {
       targetKey: 'model_id',
       as: 'model',
     });
+
+    // A car belongs to one country
+    Cars.belongsTo(models.countries, {
+      foreignKey: 'country_id',
+      targetKey: 'country_id',
+      as: 'country',
+    });
   };
 
   return Cars;
 };
+
+module.exports.fuelTypes = fuelTypes;
+module.exports.transmissionTypes = transmissionTypes;

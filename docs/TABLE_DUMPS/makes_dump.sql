@@ -214,6 +214,7 @@ COPY public.makes (make_id, name) FROM stdin;
 148	XPENG
 149	Zhidou
 33	Citroen
+151	Other
 \.
 
 
@@ -221,7 +222,7 @@ COPY public.makes (make_id, name) FROM stdin;
 -- Name: makes_make_id_seq; Type: SEQUENCE SET; Schema: public; Owner: carfinder
 --
 
-SELECT pg_catalog.setval('public.makes_make_id_seq', 150, true);
+SELECT pg_catalog.setval('public.makes_make_id_seq', 151, true);
 
 
 --

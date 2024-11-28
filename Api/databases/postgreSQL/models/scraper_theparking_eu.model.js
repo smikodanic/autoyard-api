@@ -57,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: true,
     },
-    location: {
+    country: {
       type: DataTypes.STRING,
       allowNull: true,
     },
