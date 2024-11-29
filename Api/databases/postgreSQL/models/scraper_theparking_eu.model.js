@@ -104,6 +104,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    transfer_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
+    transfer_error: {
+      type: DataTypes.STRING(400),
+      allowNull: true,
+    },
   }, {
     tableName: 'scraper_theparking_eu',
     timestamps: false,

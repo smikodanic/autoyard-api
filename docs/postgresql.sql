@@ -118,3 +118,13 @@ ON CONFLICT (name) DO NOTHING;
 
 -- dumps (run from local computer)
 $ pg_dump -h 38.242.251.114 -U carfinder -d autoyard -t makes > makes_dump.sql
+
+-- reset sequence to match the current maximum value in the table
+SELECT setval('cars_id_seq', COALESCE((SELECT MAX(id) FROM cars), 1));
+
+-- reset all transfers in the scraepr_... table
+UPDATE scraper_theparking_eu
+SET
+	transfered=false,
+	transfer_id=NULL,
+	transfer_error=NULL

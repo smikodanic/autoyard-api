@@ -1,4 +1,7 @@
 const scraperTable_fetchRow = require('./scraperTable_fetchRow.js');
+const scraperTable_updateTransferFields = require('./scraperTable_updateTransferFields.js');
+const carsTable_upsertRow = require('./carsTable_upsertRow.js');
+
 const mapper_scraper_theparking_eu = require('./mapper.scraper_theparking_eu.js');
 
 
@@ -7,5 +10,8 @@ const mapper_scraper_theparking_eu = require('./mapper.scraper_theparking_eu.js'
  */
 module.exports = {
   scraperTable_fetchRow,
+  scraperTable_updateTransferFields,
+  carsTable_upsertRow,
+
   mapper_scraper_theparking_eu
 };

@@ -172,7 +172,7 @@ module.exports.map_transmissionField = async (scraperTableRow) => {
 /**
  * Find corresponding country in the "countries" table. If none is found then return 'Other'.
  * @param {object} scraperTableRow
- * @returns
+ * @returns {Promise<object>}
  */
 module.exports.map_countryField = async (scraperTableRow) => {
   const country_source = scraperTableRow.country;
@@ -227,8 +227,8 @@ module.exports.map_priceField = async (scraperTableRow) => {
   }
 
   // Validate scraperTableRow.price
-  if (typeof scraperTableRow.price !== 'number' || isNaN(scraperTableRow.price)) {
-    throw new Error('Invalid price value');
+  if (!!scraperTableRow.price && (typeof scraperTableRow.price !== 'number' || isNaN(scraperTableRow.price))) {
+    throw new Error(`Invalid price value "${scraperTableRow.price}" in car_id:${scraperTableRow.car_id}`);
   }
 
   // Convert price using the exchange rate
@@ -250,13 +250,13 @@ module.exports.map_priceField = async (scraperTableRow) => {
  * @param {'manual'|'automatic'|'other'} transmission
  * @param {number} country_id - countries.country_id number
  * @param {number} price_eur - price in EUR
- * @returns {object}
+ * @returns {Promise<object>}
  */
 module.exports.map_allFields = async (scraperTable, scraperTableRow, make_id, model_id, fuel, transmission, country_id, price_eur) => {
   const carsRow = {
     ad_url: scraperTableRow.car_detail_url,
     ad_title: scraperTableRow.ad_title,
-    ad_text: scraperTableRow.version,
+    ad_text: null,
     ad_date: scraperTableRow.date_published,
     make_id: make_id,
     model_id: model_id,

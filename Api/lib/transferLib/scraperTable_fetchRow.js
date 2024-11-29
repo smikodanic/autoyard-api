@@ -1,12 +1,8 @@
-const chalk = require('chalk');
-
-
-
 /**
  * Fetch o asingle row from scraper_... table.
 * Notice returned object must contain fields defined i
 * Example of the returned object:
-*  {
+* {
 car_id: 150819,
 searchpage_num: 54,
 searchpage_url: 'https://www.theparking.eu/used-cars/KIA.html',
@@ -33,8 +29,8 @@ crawled_at: 2024-11-27T00:52:06.884Z,
 transfered: false
 }
 * @param {string} scraperTable - scraper_theparking_eu
-* @param {object} where - sql where for scraperTable
-* @returns {object}
+* @param {object} where - sql where for scraperTable: {"car_id": 150819, "transfered": false}
+* @returns {Promise<object>}
 */
 module.exports = async (scraperTable, where) => {
   const db = global.api.postgreSQL;
@@ -45,11 +41,9 @@ module.exports = async (scraperTable, where) => {
 
   // Find one row with given criteria
   const scraperTableRow = await scraperTableMD.findOne({
-    where: { ...where, transfered: false },
+    where,
     raw: true, // Return plain JavaScript object instead of Sequelize instance
   });
-
-  if (!scraperTableRow) { console.log(chalk.yellow('No row found with the given criteria.')); }
 
   return scraperTableRow;
 };
