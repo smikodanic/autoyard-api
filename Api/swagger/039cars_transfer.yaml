@@ -1,0 +1,68 @@
+paths:
+  /cars/transfer:
+    post:
+      tags:
+        - cars
+      summary: Transfer rows from a scraper table to the cars table.
+      description: Transfers rows from a specified scraper table to the cars table. Supports mapping fields and updating transfer status in the scraper table.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scraperTable:
+                  type: string
+                  description: Name of the scraper table to transfer rows from.
+                  example: scraper_theparking_eu
+                where:
+                  type: object
+                  description: SQL `WHERE` criteria to filter rows in the scraper table.
+                  example:
+                    car_id: 150819
+                    transfered: false
+                transferLimit:
+                  type: integer
+                  description: Number of rows to transfer.
+                  example: 1
+              required:
+                - scraperTable
+                - where
+                - transferLimit
+      responses:
+        '200':
+          description: Transfer operation started successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    description: Indicates if the operation was successful.
+                  msg:
+                    type: string
+                    description: Status message of the transfer operation.
+                  err_message:
+                    type: string
+                    description: Error message if any error occurred during transfer.
+                  query:
+                    type: object
+                    description: The request payload used to initiate the transfer.
+                    properties:
+                      body:
+                        type: object
+        '400':
+          description: Bad request. Missing or invalid parameters.
+        '500':
+          description: Internal server error. Unexpected errors during processing.
+
+components:
+  schemas:
+    WhereCriteria:
+      type: object
+      description: SQL WHERE criteria to filter rows.
+      example:
+        car_id: 150819
+        transfered: false
