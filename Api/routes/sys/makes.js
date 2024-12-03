@@ -12,7 +12,13 @@ module.exports = async (req, res, next) => {
     const db = global.api.postgreSQL;
     const makesMD = db.sequelize.models['makesMD'];
     const makes = await makesMD.findAll({
-      order: [[Sequelize.col('name'), 'ASC']],
+      order: [
+        [
+          Sequelize.literal(`CASE WHEN "name" = 'Other' THEN 1 ELSE 0 END`),
+          'ASC'
+        ],
+        [Sequelize.col('name'), 'ASC']
+      ],
       raw: true
     });
 

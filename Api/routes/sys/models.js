@@ -21,7 +21,13 @@ module.exports = async (req, res, next) => {
       where: {
         make_id: make_id,  // Filter by make_id
       },
-      order: [[Sequelize.col('name'), 'ASC']],  // Sort by name alphabetically
+      order: [
+        [
+          Sequelize.literal(`CASE WHEN "name" = 'Other' THEN 1 ELSE 0 END`),
+          'ASC'
+        ],
+        [Sequelize.col('name'), 'ASC']
+      ],  // Sort by name alphabetically
       raw: true
     });
 
