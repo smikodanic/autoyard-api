@@ -50,7 +50,6 @@ module.exports = async (req, res, next) => {
         raw: true
       });
       country_id = countriesRow ? countriesRow.country_id : null;
-      console.log('country_id::', country_id);
     }
 
 
@@ -64,13 +63,14 @@ module.exports = async (req, res, next) => {
     if (!!req.body.ad_text_contains) { where.ad_title = { [Op.iLike]: `%${req.body.ad_text_contains}%` }; }
 
     // ad_date range
-    let ad_date_from = req.body.ad_date_from || '2000-01-01';
-    ad_date_from = new Date(ad_date_from);
-    let ad_date_to = req.body.ad_date_to || timeLib.getCurrentYYYYMMDD();
-    ad_date_to = new Date(ad_date_to);
-    where.ad_date = {
-      [Op.between]: [ad_date_from, ad_date_to]
-    };
+    if (req.body.ad_date_from && req.body.ad_date_to) {
+      const ad_date_from = new Date(req.body.ad_date_from);
+      const ad_date_to = new Date(req.body.ad_date_to);
+      where.ad_date = {
+        [Op.between]: [ad_date_from, ad_date_to]
+      };
+    }
+
 
     // make_id, model_id, version, fuel
     if (!!req.body.make_id) { where.make = req.body.make_id; }
@@ -79,36 +79,48 @@ module.exports = async (req, res, next) => {
     if (!!req.body.fuel) { where.fuel = req.body.fuel; }
 
     // mileage range
-    const mileage_km_from = req.body.mileage_km_from ? req.body.mileage_km_from : 0;
-    const mileage_km_to = req.body.mileage_km_to ? req.body.mileage_km_to : 1000000;
-    where.mileage_km = {
-      [Op.gte]: mileage_km_from,
-      [Op.lte]: mileage_km_to
-    };
+    const mileage_km_from = req.body.mileage_km_from;
+    const mileage_km_to = req.body.mileage_km_to;
+    if ((mileage_km_from === 0 || mileage_km_from) && mileage_km_to) {
+      where.mileage_km = {
+        [Op.gte]: mileage_km_from,
+        [Op.lte]: mileage_km_to
+      };
+    }
+
 
     // power range
-    const power_kw_from = req.body.power_kw_from ? req.body.power_kw_from : 0;
-    const power_kw_to = req.body.power_kw_to ? req.body.power_kw_to : 1000;
-    where.power_kw = {
-      [Op.gte]: power_kw_from,
-      [Op.lte]: power_kw_to
-    };
+    const power_kw_from = req.body.power_kw_from;
+    const power_kw_to = req.body.power_kw_to;
+    if ((power_kw_from === 0 || power_kw_from) && power_kw_to) {
+      where.power_kw = {
+        [Op.gte]: power_kw_from,
+        [Op.lte]: power_kw_to
+      };
+    }
+
 
     // engine_cc range
-    const engine_cc_from = req.body.engine_cc_from ? req.body.engine_cc_from : 0;
-    const engine_cc_to = req.body.engine_cc_to ? req.body.engine_cc_to : 15000;
-    where.engine_cc = {
-      [Op.gte]: engine_cc_from,
-      [Op.lte]: engine_cc_to
-    };
+    const engine_cc_from = req.body.engine_cc_from;
+    const engine_cc_to = req.body.engine_cc_to;
+    if ((engine_cc_from === 0 || engine_cc_from) && engine_cc_to) {
+      where.engine_cc = {
+        [Op.gte]: engine_cc_from,
+        [Op.lte]: engine_cc_to
+      };
+    }
+
 
     // year range
-    const year_from = req.body.year_from ?? 1900;
-    const year_to = req.body.year_to ?? new Date().getFullYear();
-    where.year = {
-      [Op.gte]: year_from,
-      [Op.lte]: year_to
-    };
+    const year_from = req.body.year_from;
+    const year_to = req.body.year_to;
+    if ((year_from === 0 || year_from) && year_to) {
+      where.year = {
+        [Op.gte]: year_from,
+        [Op.lte]: year_to
+      };
+    }
+
 
     if (!!req.body.transmission) { where.transmission = req.body.transmission; }
     if (!!req.body.color) { where.color = req.body.color; }
@@ -116,12 +128,14 @@ module.exports = async (req, res, next) => {
     if (!!req.body.country_id) { where.country_id = country_id; }
 
     // price range
-    const price_eur_from = req.body.price_eur_from ?? 0;
-    const price_eur_to = req.body.price_eur_to ?? 1000000;
-    where.price_eur = {
-      [Op.gte]: price_eur_from,
-      [Op.lte]: price_eur_to
-    };
+    const price_eur_from = req.body.price_eur_from;
+    const price_eur_to = req.body.price_eur_to;
+    if ((price_eur_from === 0 || price_eur_from) && price_eur_to) {
+      where.price_eur = {
+        [Op.gte]: price_eur_from,
+        [Op.lte]: price_eur_to
+      };
+    }
 
     // has image
     if (req.body.has_image === true) { where.image_url = { [Op.ne]: null, [Op.ne]: '' }; }
@@ -133,14 +147,45 @@ module.exports = async (req, res, next) => {
 
     /* send request to DB */
     const carsMD = db.sequelize.models['carsMD'];
-    const { count, rows } = await carsMD.findAndCountAll({ where, limit, offset, order });
+    const { count, rows } = await carsMD.findAndCountAll({
+      where,
+      limit,
+      offset,
+      order,
+      include: [
+        {
+          model: db.sequelize.models['makesMD'],
+          as: 'make', // Use the alias defined in the association
+          attributes: ['make_id', 'name'] // Select specific fields
+        },
+        {
+          model: db.sequelize.models['modelsMD'],
+          as: 'model', // Use the alias defined in the association
+          attributes: ['model_id', 'name'] // Select specific fields
+        },
+        {
+          model: db.sequelize.models['countriesMD'],
+          as: 'country', // Use the alias defined in the association
+          attributes: ['country_id', 'name'] // Select specific fields
+        }
+      ],
+    });
+
+    const data = rows.map(row => ({
+      ...row.toJSON(),
+      make: row.make?.name,
+      model: row.model?.name,
+      country: row.country?.name,
+    }));
 
 
     /* send response */
+    console.log('where::', where);
+    // console.log('data::', data);
     res.json({
       success: true,
       count,
-      data: rows,
+      data,
       query: {
         body: req.body,
         where,

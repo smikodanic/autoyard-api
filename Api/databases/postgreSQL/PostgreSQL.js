@@ -48,14 +48,39 @@ class PostgreSQL {
    * Define models
    */
   defineModels() {
-    makes_model(this.sequelize, DataTypes);
-    models_model(this.sequelize, DataTypes);
-    countries_model(this.sequelize, DataTypes);
-    exchange_rates_model(this.sequelize, DataTypes);
+    const Make = makes_model(this.sequelize, DataTypes);
+    const Model = models_model(this.sequelize, DataTypes);
+    const Country = countries_model(this.sequelize, DataTypes);
+    const Exchange_rate = exchange_rates_model(this.sequelize, DataTypes);
 
-    cars_model(this.sequelize, DataTypes);
+    const Car = cars_model(this.sequelize, DataTypes);
 
     scraper_theparking_eu_model(this.sequelize, DataTypes);
+
+
+    // A car belongs to one make
+    Car.belongsTo(Make, {
+      foreignKey: 'make_id',
+      targetKey: 'make_id',
+      as: 'make',
+    });
+    Car.hasMany(Make, { foreignKey: 'make_id' });
+
+    // A car belongs to one model
+    Car.belongsTo(Model, {
+      foreignKey: 'model_id',
+      targetKey: 'model_id',
+      as: 'model',
+    });
+    Car.hasMany(Model, { foreignKey: 'model_id' });
+
+    // A car belongs to one country
+    Car.belongsTo(Country, {
+      foreignKey: 'country_id',
+      targetKey: 'country_id',
+      as: 'country',
+    });
+    Car.hasMany(Country, { foreignKey: 'country_id' });
   }
 
 

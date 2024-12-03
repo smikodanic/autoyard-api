@@ -119,28 +119,28 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   // Defining associations
-  Cars.associate = (models) => {
-    // A car belongs to one make
-    Cars.belongsTo(models.makes, {
-      foreignKey: 'make_id',
-      targetKey: 'make_id',
-      as: 'make',
-    });
+  // Cars.associate = (models) => {
+  //   // A car belongs to one make
+  //   Cars.belongsTo(models.makesMD, {
+  //     foreignKey: 'make_id',
+  //     targetKey: 'make_id',
+  //     as: 'make',
+  //   });
 
-    // A car belongs to one model
-    Cars.belongsTo(models.models, {
-      foreignKey: 'model_id',
-      targetKey: 'model_id',
-      as: 'model',
-    });
+  //   // A car belongs to one model
+  //   Cars.belongsTo(models.modelsMD, {
+  //     foreignKey: 'model_id',
+  //     targetKey: 'model_id',
+  //     as: 'model',
+  //   });
 
-    // A car belongs to one country
-    Cars.belongsTo(models.countries, {
-      foreignKey: 'country_id',
-      targetKey: 'country_id',
-      as: 'country',
-    });
-  };
+  //   // A car belongs to one country
+  //   Cars.belongsTo(models.countriesMD, {
+  //     foreignKey: 'country_id',
+  //     targetKey: 'country_id',
+  //     as: 'country',
+  //   });
+  // };
 
   return Cars;
 };
