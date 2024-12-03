@@ -97,13 +97,14 @@ module.exports = async (req, res, next) => {
         console.log(chalk.greenBright(`${i}. + cars.id: ${carsRow_upserted.id} | ${carsRow_upserted.make} | ${carsRow_upserted.model} | ${carsRow_upserted.country} | ${carsRow_upserted.price_eur}€ | ${carsRow_upserted.fuel} | ${carsRow_upserted.year} | color:${carsRow_upserted.color} | ${carsRow_upserted.ad_title}`));
 
       } catch (err) {
-        err_message = err.message;
+        console.log(err);
+        err_message = err.message ?? '';
 
         /* update fields "transfered" and "transfer_error" in the scraper table */
         const scraperTable_car_id = scraperTableRow.car_id;
         const transfered = true;
         const transfer_id = null;
-        const transfer_error = `car_id:${scraperTableRow.car_id} -` + err.stack;
+        const transfer_error = err_message;
         await transferLib.scraperTable_updateTransferFields(scraperTable, scraperTable_car_id, transfered, transfer_id, transfer_error);
 
         /* log on error */
@@ -118,7 +119,7 @@ module.exports = async (req, res, next) => {
       /* send response after first fetched and transfered row */
       if (i === 1) {
         res.json({
-          success: true,
+          success: !err_message,
           msg: 'The transfer started',
           err_message,
           query: {
@@ -136,7 +137,7 @@ module.exports = async (req, res, next) => {
 
 
   } catch (err) {
-    console.log(err);
+
   }
 
 };

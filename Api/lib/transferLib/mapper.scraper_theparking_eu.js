@@ -45,23 +45,26 @@ module.exports.map_makeField = async (scraperTableRow) => {
   const db = global.api.postgreSQL;
   const makesMD = db.sequelize.models['makesMD'];
 
-  const where = make_source ?
-    {
-      [Op.or]: [
-        { name: { [Op.iLike]: `%${make_source}%` } },
-        { name: 'Other' }
-      ]
-    } :
-
-    {
-      name: 'Other'
-    };
-
+  const where = { name: { [Op.iLike]: `%${make_source}%` } };
   const makesRow = await makesMD.findOne({
     where,
     raw: true // Return plain JavaScript object instead of Sequelize instance
   });
 
+  /*** If make is not found, create make and return it ***/
+  // if (!makesRow) {
+  //   makesRow = await makesMD.create(
+  //     {
+  //       name: make_source
+  //     },
+  //     {
+  //       returning: true, // Ensure the created row is returned
+  //     }
+  //   );
+  //   makesRow = makesRow.get({ plain: true }); // Convert Sequelize instance to plain object
+  // }
+
+  if (!makesRow) { throw new Error(`Map error -make:"${make_source}" table:"scraper_theparking_eu" car_id=${scraperTableRow.car_id}`); }
   return makesRow;
 };
 
@@ -80,27 +83,19 @@ module.exports.map_modelField = async (scraperTableRow, make_id) => {
   const db = global.api.postgreSQL;
   const modelsMD = db.sequelize.models['modelsMD'];
 
-  const where = model_source
-    ? {
-      [Op.or]: [
-        { make_id, name: { [Op.iLike]: `%${model_source}%` } },
-        { make_id, name: 'Other' }
-      ]
-    }
-    : { make_id, name: 'Other' };
-
+  const where = { make_id, name: { [Op.iLike]: `%${model_source}%` } };
   let modelsRow = await modelsMD.findOne({
     where,
     // attributes: ['model_id', 'make_id', 'name'], // Explicitly select these fields
     raw: true // Return plain JavaScript object instead of Sequelize instance
   });
 
-  /*** If model is not found, create 'Other' model and return it ***/
+  /*** If model is not found, create model and return it ***/
   if (!modelsRow) {
     modelsRow = await modelsMD.create(
       {
         make_id,
-        name: 'Other'
+        name: model_source
       },
       {
         returning: true, // Ensure the created row is returned
@@ -109,7 +104,40 @@ module.exports.map_modelField = async (scraperTableRow, make_id) => {
     modelsRow = modelsRow.get({ plain: true }); // Convert Sequelize instance to plain object
   }
 
+  if (!modelsRow) { throw new Error(`Map error -model:"${model_source}" table:"scraper_theparking_eu" car_id=${scraperTableRow.car_id}`); }
   return modelsRow;
+};
+
+
+
+/**
+ * Find corresponding country in the "countries" table.
+ * @param {object} scraperTableRow
+ * @returns {Promise<object>}
+ */
+module.exports.map_countryField = async (scraperTableRow) => {
+  let country_source = scraperTableRow.country;
+
+  if (country_source === 'Moldavie') { country_source = 'Moldova'; }
+
+  // find corresponding country in "countries" table
+  const db = global.api.postgreSQL;
+  const countriesMD = db.sequelize.models['countriesMD'];
+
+  const where = {
+    [Op.or]: [
+      { name: { [Op.iLike]: `%${country_source}%` } },
+      { other_names: { [Op.iLike]: `%${country_source}%` } }
+    ]
+  };
+
+  const countriesRow = await countriesMD.findOne({
+    where,
+    raw: true // Return plain JavaScript object instead of Sequelize instance
+  });
+
+  if (!countriesRow) { throw new Error(`Map error country:"${scraperTableRow.country}" table:"scraper_theparking_eu" car_id=${scraperTableRow.car_id}`); }
+  return countriesRow;
 };
 
 
@@ -165,40 +193,6 @@ module.exports.map_transmissionField = async (scraperTableRow) => {
   }
 
   return transmission;
-};
-
-
-
-/**
- * Find corresponding country in the "countries" table. If none is found then return 'Other'.
- * @param {object} scraperTableRow
- * @returns {Promise<object>}
- */
-module.exports.map_countryField = async (scraperTableRow) => {
-  const country_source = scraperTableRow.country;
-
-  // find corresponding country in "countries" table
-  const db = global.api.postgreSQL;
-  const countriesMD = db.sequelize.models['countriesMD'];
-
-  const where = country_source ?
-    {
-      [Op.or]: [
-        { name: { [Op.iLike]: `%${country_source}%` } },
-        { name: 'Other' }
-      ]
-    } :
-
-    {
-      name: 'Other'
-    };
-
-  const countriesRow = await countriesMD.findOne({
-    where,
-    raw: true // Return plain JavaScript object instead of Sequelize instance
-  });
-
-  return countriesRow;
 };
 
 

@@ -99,17 +99,17 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
       primaryKey: true
     },
-    transfered: {
+    transfered: { // successful or unsuccessful transfer: true|false
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
     },
-    transfer_id: {
+    transfer_id: { // D from the cars table, i.e., cars.id on succesful transfer (when transferd:true)
       type: DataTypes.INTEGER,
       allowNull: true
     },
-    transfer_error: {
-      type: DataTypes.STRING(400),
+    transfer_error: { // error.stack if error happens during transfer  (when transferd:false)
+      type: DataTypes.STRING(100),
       allowNull: true,
     },
   }, {
