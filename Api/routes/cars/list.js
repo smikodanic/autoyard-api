@@ -37,7 +37,26 @@ module.exports = async (req, res, next) => {
     const offset = +req.query.offset || 0;
     const order1 = req.query.order || 'created_at';
     const order_type = req.query.order_type || 'ASC';
+    const db = global.api.postgreSQL;
 
+
+    /*** find country_id ***/
+    let country_id;
+    if (req.body.country) {
+      const countriesMD = db.sequelize.models['countriesMD'];
+      const where_country = { name: { [Op.iLike]: `%${req.body.country}%` } };
+      const countriesRow = await countriesMD.findOne({
+        where_country,
+        raw: true
+      });
+      country_id = countriesRow ? countriesRow.country_id : null;
+      console.log('country_id::', country_id);
+    }
+
+
+
+
+    /*** find cars ***/
     const where = {};
 
     // ad title and text
@@ -94,7 +113,7 @@ module.exports = async (req, res, next) => {
     if (!!req.body.transmission) { where.transmission = req.body.transmission; }
     if (!!req.body.color) { where.color = req.body.color; }
     if (!!req.body.doors) { where.doors = req.body.doors; }
-    if (!!req.body.country) { where.country = req.body.country; }
+    if (!!req.body.country_id) { where.country_id = country_id; }
 
     // price range
     const price_eur_from = req.body.price_eur_from ?? 0;
@@ -113,7 +132,6 @@ module.exports = async (req, res, next) => {
     const order = [[order1, order_type]];
 
     /* send request to DB */
-    const db = global.api.postgreSQL;
     const carsMD = db.sequelize.models['carsMD'];
     const { count, rows } = await carsMD.findAndCountAll({ where, limit, offset, order });
 
