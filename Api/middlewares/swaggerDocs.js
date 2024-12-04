@@ -16,7 +16,7 @@ const loadSwaggerDocs = (directory) => {
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: process.env.API_ENV === 'development' ? 'http' : 'https',
+          type: 'http',
           scheme: 'bearer',
           bearerFormat: 'Bearer',
         }
