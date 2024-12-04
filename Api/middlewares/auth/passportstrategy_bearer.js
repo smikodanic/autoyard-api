@@ -14,12 +14,16 @@ const BearerStrategy = require('passport-http-bearer').Strategy;
 
 // define strategy for Joint API
 module.exports.defineStrategy4api = () => {
+  passport.use('scraper-checker', new BearerStrategy(async (token, done) => {
+    // console.log('(scraper-checker) Bearer token:: ', token);
+    if (!process.env.API_TOKEN) {
+      const err = new Error('API Token is not configured.');
+      err.status = 500;
+      return done(err, false);
+    }
 
-  passport.use('bearer-api', new BearerStrategy(async (token, done) => {
-    // console.log('Bearer token (Joint API)):: ', token);
-
-    if (token != process.env.API_TOKEN) { // when user is not found
-      const err = new Error('Bad API Token.');
+    if (token !== process.env.API_TOKEN) {
+      const err = new Error('Bad API Token sent from the scraper or checker.');
       err.status = 403;
       done(err, false);
     } else {

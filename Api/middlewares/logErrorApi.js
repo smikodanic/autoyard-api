@@ -68,6 +68,7 @@ class ErrorApi {
    */
   send2console(err) {
     console.log(JSON.stringify(this.errDoc, null, 4).cliBoja('red'));
+    console.log(err);
   }
 
 

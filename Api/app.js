@@ -33,6 +33,7 @@ app.use((req, res, next) => { global.api.req = req; global.api.res = res; next()
 /***** API ROUTES *****/
 app.use('/stat', require('./routes/stat/index.js'));
 app.use('/sys', require('./routes/sys/index.js'));
+app.use('/proc', require('./routes/proc/index.js'));
 app.use('/cars', require('./routes/cars/index.js'));
 app.use('/theparking-eu', require('./routes/theparking-eu/index.js'));
 app.use('/misc', require('./routes/misc/index.js'));

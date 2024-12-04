@@ -1,3 +1,5 @@
+const { Sequelize } = require('sequelize');
+
 const fuelTypes = [
   'gasoline',
   'diesel',
@@ -108,6 +110,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false,
+    },
+    checked_at: { // date when checker was checked the "ad_url"
+      type: DataTypes.DATEONLY,
+      allowNull: true,
     },
     scraper_table_row: {
       type: DataTypes.STRING(50),

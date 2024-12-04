@@ -1,0 +1,90 @@
+paths:
+  /proc/checker/grab-cars:
+    get:
+      tags:
+        - proc
+      security:
+        - bearerAuth: []
+      summary: Retrieve a list of cars based on their `checked_at` status
+      description: |
+        This endpoint retrieves cars from the database based on their `checked_at` value.
+        You can filter for cars with `checked_at` older than a specific date or for cars where `checked_at` is `NULL`.
+      parameters:
+        - name: checked_at_olderthan
+          in: query
+          description: |
+            Specifies the latest date for the `checked_at` field to filter rows.
+            Use `'null'` to retrieve cars where `checked_at` is `NULL`.
+          required: false
+          schema:
+            type: string
+            example: "2024-11-23"
+        - name: limit
+          in: query
+          description: |
+            The maximum number of cars to retrieve. Defaults to 100.
+            The maximum allowed value is 100.
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 100
+      responses:
+        200:
+          description: Successfully retrieved the list of cars
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  count:
+                    type: integer
+                    description: Total number of cars retrieved.
+                    example: 50
+                  data:
+                    type: array
+                    description: Array of cars matching the criteria.
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        ad_url:
+                          type: string
+                          example: "https://example.com/ad/123"
+                        checked_at:
+                          type: string
+                          format: date
+                          nullable: true
+                          example: "2024-11-20"
+        400:
+          description: Bad Request - Invalid query parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "Invalid date format for 'checked_at_olderthan'."
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  error:
+                    type: string
+                    example: "An unexpected error occurred."

@@ -1,0 +1,71 @@
+paths:
+  /proc/checker/update-remove-car:
+    get:
+      tags:
+        - proc
+      security:
+        - bearerAuth: []
+      summary: "Update or Remove a Car"
+      description: |
+        - If `action` is `update`, set the `checked_at` field to the current date.
+        - If `action` is `remove`, delete the car row from the `cars` table.
+        - If `action` is not defined or is invalid, the request does nothing.
+      parameters:
+        - name: "car_id"
+          in: "query"
+          description: "ID of the car to be updated or removed."
+          required: true
+          type: "integer"
+        - name: "action"
+          in: "query"
+          description: "Action to be performed. Can be 'update' or 'remove'."
+          required: true
+          type: "string"
+          enum:
+            - "update"
+            - "remove"
+      responses:
+        200:
+          description: "Successfully updated or removed the car."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: true
+              msg:
+                type: "string"
+                example: "A car with id:12 is updated."
+        400:
+          description: "Bad Request. Missing or invalid parameters."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: false
+              msg:
+                type: "string"
+                example: "The 'car_id' is not defined."
+        404:
+          description: "Car not found or action failed."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: false
+              msg:
+                type: "string"
+                example: "Car with ID 12 not found or action failed."
+        500:
+          description: "Internal Server Error."
+          schema:
+            type: "object"
+            properties:
+              success:
+                type: "boolean"
+                example: false
+              msg:
+                type: "string"
+                example: "An error occurred while processing the request."

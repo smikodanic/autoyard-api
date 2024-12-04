@@ -1,10 +1,7 @@
-const express = require('express');
-const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const path = require('path');
 const fs = require('fs');
 
-const app = express();
 
 // Function to merge all YAML files into a single Swagger document
 const loadSwaggerDocs = (directory) => {
@@ -16,6 +13,15 @@ const loadSwaggerDocs = (directory) => {
       description: 'Car search engine.',
     },
     paths: {},
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: process.env.API_ENV === 'development' ? 'http' : 'https',
+          scheme: 'bearer',
+          bearerFormat: 'Bearer',
+        }
+      }
+    },
     servers: [
       {
         url: process.env.API_ENV === 'development' ? 'http://localhost:3138' : 'https://api.autoyard.eu/'

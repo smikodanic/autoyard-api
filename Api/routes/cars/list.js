@@ -180,8 +180,6 @@ module.exports = async (req, res, next) => {
 
 
     /* send response */
-    console.log('where::', where);
-    // console.log('data::', data);
     res.json({
       success: true,
       count,

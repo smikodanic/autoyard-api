@@ -3,6 +3,8 @@ paths:
     post:
       tags:
         - cars
+      security:
+        - bearerAuth: []
       summary: Transfer rows from a scraper table to the cars table.
       description: Transfers rows from a specified scraper table to the cars table. Supports mapping fields and updating transfer status in the scraper table.
       requestBody:

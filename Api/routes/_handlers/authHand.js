@@ -10,9 +10,8 @@ class AuthHand {
    */
   authCheck(label) {
     return passport.authenticate(label, {
-      successRedirect: '',
+      // successRedirect: '',
       // failureRedirect: '/examples/auth/passport/badauth',
-      failureRedirect: '',
       failWithError: true, // send error as JSON instead of 'unauthorized' string
       failureFlash: false,
       session: false // this must be false
