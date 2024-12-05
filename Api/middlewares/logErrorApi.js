@@ -48,7 +48,11 @@ class ErrorApi {
   send2client(res, next) {
     if (!res) { return; }
     const status = !!this.errDoc && !!this.errDoc.status ? this.errDoc.status : 400;
-    res.status(status).json(this.errDoc);
+    res.status(status).json({
+      success: false,
+      error_message: this.errDoc.message,
+      error_stack: this.errDoc.stack,
+    });
   }
 
 
@@ -67,7 +71,7 @@ class ErrorApi {
    * @param {*} err
    */
   send2console(err) {
-    console.log(JSON.stringify(this.errDoc, null, 4).cliBoja('red'));
+    // console.log(JSON.stringify(this.errDoc, null, 4).cliBoja('red'));
     console.log(err);
   }
 

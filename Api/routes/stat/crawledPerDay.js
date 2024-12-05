@@ -49,7 +49,6 @@ ORDER BY day ASC;
     });
 
   } catch (err) {
-    console.log(err);
     next(err);
   }
 

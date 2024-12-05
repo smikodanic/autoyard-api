@@ -47,7 +47,6 @@ module.exports.grabCars = async (req, res, next) => {
     });
 
   } catch (err) {
-    console.log(err);
     next(err);
   }
 
@@ -88,7 +87,6 @@ module.exports.updateRemoveCar = async (req, res, next) => {
     });
 
   } catch (err) {
-    console.log(err);
     next(err);
   }
 
