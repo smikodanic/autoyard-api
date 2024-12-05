@@ -1,21 +1,35 @@
 paths:
-  /stat/crawled-per-month:
+  /stat/scraped-per-day:
     get:
       tags:
         - stat
-      summary: Count scraped cars per month for a specified year
-      description: Returns the number of scraped cars per month for a given year based on the `crawled_at` field.
+      summary: Count crawled cars per day for a given year and month
+      description: Counts the number of scraped cars per day in a specified year based on the "scraped_at" field.
       parameters:
+        - name: table
+          in: query
+          required: true
+          schema:
+            type: string
+            example: scraper_theparking_eu
+          description: The scraper table where car details are saved.
         - name: year
           in: query
           required: true
           schema:
             type: integer
             example: 2024
-          description: The year to filter the results by.
+          description: The year for which to retrieve the count of cars per day.
+        - name: month
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 11
+          description: The month for which to retrieve the count of cars per day.
       responses:
         '200':
-          description: Successful response
+          description: A list of days with the count of scraped cars for each day.
           content:
             application/json:
               schema:
@@ -29,16 +43,15 @@ paths:
                     items:
                       type: object
                       properties:
-                        month:
-                          type: integer
-                          description: The month of the year (1-12).
-                          example: 1
+                        day:
+                          type: string
+                          format: date
+                          example: '2024-01-01'
                         count:
                           type: integer
-                          description: The count of cars scraped in the given month.
-                          example: 150
+                          example: 120
         '400':
-          description: Invalid input (missing or invalid year parameter)
+          description: Missing year parameter
           content:
             application/json:
               schema:
@@ -47,9 +60,9 @@ paths:
                   success:
                     type: boolean
                     example: false
-                  error:
+                  message:
                     type: string
-                    example: "Year parameter is required"
+                    example: 'Year parameter is required'
         '500':
           description: Internal server error
           content:
@@ -60,6 +73,6 @@ paths:
                   success:
                     type: boolean
                     example: false
-                  error:
+                  message:
                     type: string
-                    example: "Internal server error"
+                    example: 'An error occurred while processing your request'

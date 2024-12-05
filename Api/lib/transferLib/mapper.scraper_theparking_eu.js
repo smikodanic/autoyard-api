@@ -26,7 +26,7 @@ color: 'white',
 doors: '5',
 category: 'compact',
 ad_title: 'kia - ceed 1.0 tgdi 88kw 120cv tech',
-crawled_at: 2024-11-27T00:52:06.884Z,
+scraped_at: 2024-11-27T00:52:06.884Z,
 transfered: false
 }
  */

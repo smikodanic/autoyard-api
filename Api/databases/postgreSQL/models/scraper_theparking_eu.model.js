@@ -93,7 +93,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING(400),
       allowNull: true,
     },
-    crawled_at: {
+    scraped_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW,

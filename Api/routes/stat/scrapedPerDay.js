@@ -3,8 +3,8 @@ const { Sequelize } = require('sequelize');
 
 
 /**
- * GET /stat/crawled-per-day?year=2024&month=10
- * Count number of scraped cars per day for a given year and month. Uses the "crawled_at" field.
+ * GET /stat/scraped-per-day?table=scraper_theparking_eu&year=2024&month=10
+ * Count number of scraped cars per day for a given year and month. Uses the "scraped_at" field.
  */
 module.exports = async (req, res, next) => {
   try {
@@ -13,27 +13,29 @@ module.exports = async (req, res, next) => {
     if (!month) { throw new Error('The "month" parameter is required'); }
 
     const db = global.api.postgreSQL;
-    const carsMD = db.sequelize.models['carsMD'];
+    const table = req.query.table; // scraper_theparking_eu
+    const scraperTableMD = db.sequelize.models[`${table}MD`];
+    if (!scraperTableMD) { throw new Error(`The table "${table}" doesn't exist`); }
 
     // Perform the query to count cars per day in the specified year
     /*
 SELECT
-  DATE(crawled_at) AS day,
+  DATE(scraped_at) AS day,
   COUNT(car_id) AS count
 FROM cars
-WHERE EXTRACT(YEAR FROM crawled_at) = :year
+WHERE EXTRACT(YEAR FROM scraped_at) = :year
 GROUP BY day
 ORDER BY day ASC;
     */
-    const countPerDay = await carsMD.findAll({
+    const countPerDay = await scraperTableMD.findAll({
       attributes: [
-        [Sequelize.fn('DATE', Sequelize.col('crawled_at')), 'day'], // Extract day from crawled_at: DATE(crawled_at) AS day
+        [Sequelize.fn('DATE', Sequelize.col('scraped_at')), 'day'], // Extract day from scraped_at: DATE(scraped_at) AS day
         [Sequelize.fn('COUNT', Sequelize.col('car_id')), 'count'] // Count car_id per day: COUNT(car_id) AS count
       ],
       where: {
         [Sequelize.Op.and]: [
-          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('YEAR FROM "crawled_at"')), year),
-          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "crawled_at"')), month)
+          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('YEAR FROM "scraped_at"')), year),
+          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "scraped_at"')), month)
         ]
       },
       group: ['day'],

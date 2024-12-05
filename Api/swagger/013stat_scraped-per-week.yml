@@ -1,11 +1,18 @@
 paths:
-  /stat/crawled-per-week:
+  /stat/scraped-per-week:
     get:
       tags:
         - stat
       summary: Count the number of scraped cars per week for a specified year and month
-      description: Returns the count of cars scraped per week, grouped by the start of each week in the specified year and month based on the `crawled_at` field.
+      description: Returns the count of cars scraped per week, grouped by the start of each week in the specified year and month based on the `scraped_at` field.
       parameters:
+        - name: table
+          in: query
+          required: true
+          schema:
+            type: string
+            example: scraper_theparking_eus
+          description: The scraper table where car details are saved.
         - name: year
           in: query
           required: true

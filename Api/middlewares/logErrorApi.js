@@ -50,6 +50,7 @@ class ErrorApi {
     const status = !!this.errDoc && !!this.errDoc.status ? this.errDoc.status : 400;
     res.status(status).json({
       success: false,
+      endpoint: this.errDoc.endpoint,
       error_message: this.errDoc.message,
       error_stack: this.errDoc.stack,
     });

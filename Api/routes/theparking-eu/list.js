@@ -3,7 +3,7 @@ const timeLib = require('../../lib/timeLib.js');
 
 
 /**
- * POST /theparking-eu/list?limit=10&offset=0&order=crawled_at&order_type=DESC
+ * POST /theparking-eu/list?limit=10&offset=0&order=scraped_at&order_type=DESC
  {
   "make": "Volkswagen",
   "model": "Golf",
@@ -30,7 +30,7 @@ module.exports = async (req, res, next) => {
   try {
     const limit = req.query.limit > 50 ? 50 : +req.query.limit;
     const offset = +req.query.offset || 0;
-    const order1 = req.query.order || 'crawled_at';
+    const order1 = req.query.order || 'scraped_at';
     const order_type = req.query.order_type || 'ASC';
 
     const where = {};

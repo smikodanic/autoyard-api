@@ -2,8 +2,8 @@ const { Sequelize } = require('sequelize');
 const { format } = require('date-fns');
 
 /**
- * GET /stat/crawled-per-week?year=2024&month=10
- * Count number of scraped cars per week for a given year and month using the "crawled_at" field.
+ * GET /stat/scraped-per-week?year=2024&month=10
+ * Count number of scraped cars per week for a given year and month using the "scraped_at" field.
  */
 module.exports = async (req, res, next) => {
   try {
@@ -12,28 +12,30 @@ module.exports = async (req, res, next) => {
     if (!month) { throw new Error('The "month" parameter is required'); }
 
     const db = global.api.postgreSQL;
-    const carsMD = db.sequelize.models['carsMD'];
+    const table = req.query.table; // scraper_theparking_eu
+    const scraperTableMD = db.sequelize.models[`${table}MD`];
+    if (!scraperTableMD) { throw new Error(`The table "${table}" doesn't exist`); }
 
     // Perform the query to count cars per week in the specified year and month
     /*
 SELECT
-  DATE_TRUNC('week', crawled_at) AS week,
+  DATE_TRUNC('week', scraped_at) AS week,
   COUNT(car_id) AS count
 FROM cars
-WHERE EXTRACT(YEAR FROM crawled_at) = :year
-  AND EXTRACT(MONTH FROM crawled_at) = :month
+WHERE EXTRACT(YEAR FROM scraped_at) = :year
+  AND EXTRACT(MONTH FROM scraped_at) = :month
 GROUP BY week
 ORDER BY week ASC;
     */
-    const countPerWeek = await carsMD.findAll({
+    const countPerWeek = await scraperTableMD.findAll({
       attributes: [
-        [Sequelize.fn('DATE_TRUNC', 'week', Sequelize.col('crawled_at')), 'week'], // Group by start of the week
+        [Sequelize.fn('DATE_TRUNC', 'week', Sequelize.col('scraped_at')), 'week'], // Group by start of the week
         [Sequelize.fn('COUNT', Sequelize.col('car_id')), 'count'] // Count car_id per week
       ],
       where: {
         [Sequelize.Op.and]: [
-          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('YEAR FROM "crawled_at"')), year),
-          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "crawled_at"')), month)
+          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('YEAR FROM "scraped_at"')), year),
+          Sequelize.where(Sequelize.fn('EXTRACT', Sequelize.literal('MONTH FROM "scraped_at"')), month)
         ]
       },
       group: ['week'],

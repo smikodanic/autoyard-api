@@ -2,15 +2,15 @@ const express = require('express');
 const router = express.Router();
 const authHand = require('../_handlers/authHand.js');
 
-const crawledPerDay = require('./crawledPerDay.js');
-const crawledPerMonth = require('./crawledPerMonth.js');
-const crawledPerWeek = require('./crawledPerWeek.js');
+const scrapedPerDay = require('./scrapedPerDay.js');
+const scrapedPerMonth = require('./scrapedPerMonth.js');
+const scrapedPerWeek = require('./scrapedPerWeek.js');
 
 
 // count scraped cars per day, per month and per week
-router.get('/crawled-per-day', crawledPerDay);
-router.get('/crawled-per-month', crawledPerMonth);
-router.get('/crawled-per-week', crawledPerWeek);
+router.get('/scraped-per-day', scrapedPerDay);
+router.get('/scraped-per-month', scrapedPerMonth);
+router.get('/scraped-per-week', scrapedPerWeek);
 
 
 

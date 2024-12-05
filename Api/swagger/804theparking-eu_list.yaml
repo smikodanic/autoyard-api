@@ -24,7 +24,7 @@ paths:
           required: false
           schema:
             type: string
-            example: crawled_at
+            example: scraped_at
           description: Field by which to sort the results in ascending (ASC) or descending (DESC) order
         - in: query
           name: order_type
